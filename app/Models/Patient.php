@@ -20,4 +20,8 @@ class Patient extends Model
     {
         return $this->hasMany(DailyRecord::class);
     }
+    public function nombreCompleto()
+    {
+        return $this->nombre . ' ' . $this->apellido;
+    }
 }

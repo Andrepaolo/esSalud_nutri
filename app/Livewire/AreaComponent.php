@@ -2,9 +2,11 @@
 
 namespace App\Livewire;
 
+use App\Exports\DailyRecordsExport;
 use App\Models\Area;
 use Livewire\Component;
 use Livewire\WithPagination;
+use Maatwebsite\Excel\Facades\Excel;
 
 class AreaComponent extends Component
 {
@@ -92,4 +94,11 @@ class AreaComponent extends Component
         $this->area = ['id' => '', 'nombre' => '', 'description'=>''];
         $this->resetErrorBag();
     }
+    //---------------------------- Exportar a Excel - INICIO ---------------------------------------
+    public function exportToExcel()
+    {
+        return Excel::download(new DailyRecordsExport(), 'registros_diarios_por_area.xlsx');
+    }
+
+    //---------------------------- Exportar a Excel - FIN ------------------------------------------
 }

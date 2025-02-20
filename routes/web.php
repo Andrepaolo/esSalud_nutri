@@ -1,8 +1,8 @@
 <?php
 
 use App\Livewire\AreaComponent;
+use App\Livewire\CrudBed;
 use App\Livewire\DailyRecordComponent;
-use App\Models\Area;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -21,4 +21,8 @@ Route::middleware([
     //rotas dentro del app 
     Route::get('/areas', AreaComponent::class)->name('areas');
     Route::get('/drecords', DailyRecordComponent::class)->name('drecords');
+    Route::get('/beds', CrudBed::class)->name('beds.index');
+    
+    //impresion
+    Route::get('/imprimir-dietas/{horario}/{area?}', [DailyRecordComponent::class, 'imprimirDietas'])->name('imprimir.dietas');
 });

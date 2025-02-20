@@ -233,42 +233,42 @@ class DatabaseSeeder extends Seeder
         ]);
         Patient::create([
             'nombre' => 'Vlad', 
-            'apellido' => 'meu  Amigo',
+            'apellido' => 'Kasa  Amigo',
             'fecha_nacimiento'=>'2002-03-14',
             'dni'=>'69878334',
             
         ]);
         Patient::create([
             'nombre' => 'Harisson', 
-            'apellido' => 'anjo mego',
+            'apellido' => 'anjo Turq',
             'fecha_nacimiento'=>'2002-03-14',
             'dni'=>'59878844',
             
         ]);
         Patient::create([
             'nombre' => 'joshep ', 
-            'apellido' => 'simp azo',
+            'apellido' => 'Lipa Lazo',
             'fecha_nacimiento'=>'2002-03-14',
             'dni'=>'43450173',
             
         ]);
         Patient::create([
-            'nombre' => 'mota', 
-            'apellido' => 'otro mejo',
+            'nombre' => 'Mota', 
+            'apellido' => 'Rodriguez Mejo',
             'fecha_nacimiento'=>'2002-03-14',
             'dni'=>'29878334',
             
         ]);
         Patient::create([
-            'nombre' => 'caleb', 
-            'apellido' => 'curly hair',
+            'nombre' => 'Caleb', 
+            'apellido' => 'Curly Hair',
             'fecha_nacimiento'=>'2002-03-14',
             'dni'=>'19878844',
             
         ]);
         Patient::create([
             'nombre' => 'Issac', 
-            'apellido' => 'meu  amigo',
+            'apellido' => 'Sulca Suarez',
             'fecha_nacimiento'=>'2002-03-14',
             'dni'=>'12345678',
             

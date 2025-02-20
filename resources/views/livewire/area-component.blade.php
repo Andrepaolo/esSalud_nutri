@@ -12,8 +12,12 @@
                 class="px-3 py-2 border rounded-lg w-full sm:w-2/3 shadow focus:ring-2 focus:ring-blue-400 outline-none">
             
             <button wire:click="create()" 
-                class="bg-green-500 hover:bg-green-600 text-white px-4 py-1.5 rounded-md shadow-md transition transform hover:scale-105 text-sm">
+                class="bg-green-500 hover:bg-slate-700 text-white px-4 py-1.5 rounded-md shadow-md transition transform hover:scale-105 text-sm">
                 ➕ Nueva Área
+            </button>
+            <button wire:click="exportToExcel()"
+                class="bg-green-500 hover:bg-slate-700 text-white px-4 py-1.5 rounded-md shadow-md transition transform hover:scale-105 text-sm">
+                📊𝄜Exportar a Excel📈✅
             </button>
         </div>
 

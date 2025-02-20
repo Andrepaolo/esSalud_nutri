@@ -2,13 +2,16 @@
 
 namespace App\Livewire;
 
+
 use App\Models\Area;
 use App\Models\Bed;
 use App\Models\DailyRecord;
 use App\Models\Diet;
 use App\Models\Patient;
+use Carbon\Carbon;
 use Livewire\Component;
 use Livewire\WithPagination;
+
 
 class DailyRecordComponent extends Component
 {
@@ -54,6 +57,8 @@ class DailyRecordComponent extends Component
         'indicaciones' => 'nullable|string',
         'diagnostico' => 'nullable|string',
     ];
+
+    
     
     //mount
     public function mount($registroId = null)
@@ -464,6 +469,80 @@ class DailyRecordComponent extends Component
         $this->resetErrorBag('selectedDestinationBedId'); // Limpiar errores de validación al cambiar la selección
     }
 //---------------------------------------------------Mover Pacientes Fin---------------------------------------------
+//---------------------------- Imprimir Dietas - INICIO ---------------------------------------
+    public function imprimirDietas($horario, $areaId = null)
+    {
+        $registrosDiarios = DailyRecord::with(['bed.area', 'patient'])
+            ->whereDate('fecha_registro', Carbon::today());
+
+        if ($areaId) {
+            $registrosDiarios->whereHas('bed.area', function ($query) use ($areaId) {
+                $query->where('id', $areaId);
+            });
+        }
+
+        // --- NUEVO FILTRO:  Solo registros con dieta NO vacía para el horario ---
+        switch ($horario) {
+            case 'desayuno':
+                $registrosDiarios->whereNotNull('desayuno');
+                break;
+            case 'am10':
+                $registrosDiarios->whereNotNull('am10');
+                break;
+            case 'almuerzo':
+                $registrosDiarios->whereNotNull('almuerzo');
+                break;
+            case 'cena':
+                $registrosDiarios->whereNotNull('cena');
+                break;
+            case 'pm4':
+                $registrosDiarios->whereNotNull('pm4');
+                break;
+        }
+        // -----------------------------------------------------------------------
+
+
+        $registrosDiarios = $registrosDiarios->get();
+
+        if ($registrosDiarios->isEmpty()) {
+            return null;
+        }
+
+        // --- MODIFICACIÓN IMPORTANTE: Pasar el nombre de la dieta a la vista ---
+        $nombreDietaHorario = '';
+        switch ($horario) {
+            case 'desayuno':
+                $nombreDietaHorario = 'Desayuno';
+                break;
+            case 'am10':
+                $nombreDietaHorario = 'Media Mañana (10 AM)';
+                break;
+            case 'almuerzo':
+                $nombreDietaHorario = 'Almuerzo';
+                break;
+            case 'cena':
+                $nombreDietaHorario = 'Cena';
+                break;
+            case 'pm4': // Asumiendo que "4 PM" lo tienes como 'pm4' en tu código
+                $nombreDietaHorario = 'Media Tarde (4 PM)';
+                break;
+            default:
+                $nombreDietaHorario = 'Dieta'; // Genérico si no coincide con ningún horario conocido
+                break;
+        }
+        // ------------------------------------------------------------------------
+
+
+        return view('livewire.imprimir-dietas', [
+            'registrosDiarios' => $registrosDiarios,
+            'horario' => $horario,
+            'areaId' => $areaId,
+            'nombreDietaHorario' => $nombreDietaHorario, // <-- PASAR nombreDietaHorario a la vista
+        ]);
+    } 
+//---------------------------- Imprimir Dietas - FIN ------------------------------------------
+    
+
     public function filterRecords()
     {
         $this->resetPage(); // Para evitar problemas con la paginación

@@ -32,35 +32,34 @@
         <div class="overflow-x-auto bg-white rounded-lg shadow-lg p-2">
             <table class="min-w-full border-collapse text-xs  mt-3 mb-7 ">
                 <thead>
-                    <tr class="bg-gray-200 text-gray-700">
+                        <tr class="bg-gray-200 text-gray-700">
                         <th class="py-1 px-2 w-20">Cama</th>
                         <th class="py-1 px-2 w-48">Paciente</th>
                         <th class="py-1 px-2 w-24">Fecha</th>
                         <th class="py-1 px-2 w-40">Desayuno
-                            <button class="bg-violet-500 text-white px-2 py-0.5 rounded text-[0.6rem] hover:bg-violet-700 transition">
+                            <a href="{{ route('imprimir.dietas', ['horario' => 'desayuno']) }}" target="_blank" class="bg-violet-500 text-white px-2 py-0.5 rounded text-[0.6rem] hover:bg-violet-700 transition inline-flex items-center justify-center">
                                 🖨️
-                            </button>
+                            </a>
                         </th>
                         <th class="py-1 px-2 w-40">10 AM
-                            <button class="bg-violet-500 text-white px-2 py-0.5 rounded text-[0.6rem] hover:bg-violet-700 transition">
+                            <a href="{{ route('imprimir.dietas', ['horario' => 'am10']) }}" target="_blank" class="bg-violet-500 text-white px-2 py-0.5 rounded text-[0.6rem] hover:bg-violet-700 transition inline-flex items-center justify-center">
                                 🖨️
-                            </button>
+                            </a>
                         </th>
                         <th class="py-1 px-2 w-40">Almuerzo
-                            <button class="bg-violet-500 text-white px-2 py-0.5 rounded text-[0.6rem] hover:bg-violet-700 transition">
+                            <a href="{{ route('imprimir.dietas', ['horario' => 'almuerzo']) }}" target="_blank" class="bg-violet-500 text-white px-2 py-0.5 rounded text-[0.6rem] hover:bg-violet-700 transition inline-flex items-center justify-center">
                                 🖨️
-                            </button>
+                            </a>
                         </th>
                         <th class="py-1 px-2 w-40">4 PM
-                            <button class="bg-violet-500 text-white px-2 py-0.5 rounded text-[0.6rem] hover:bg-violet-700 transition">
+                            <a href="{{ route('imprimir.dietas', ['horario' => 'pm4']) }}" target="_blank" class="bg-violet-500 text-white px-2 py-0.5 rounded text-[0.6rem] hover:bg-violet-700 transition inline-flex items-center justify-center">
                                 🖨️
-                            </button>
+                            </a>
                         </th>
-
-                        <th class="py-1 px-2 w-40">Cena
-                            <button class="bg-violet-500 text-white px-2 py-0.5 rounded text-[0.6rem] hover:bg-violet-700 transition">
-                                🖨️
-                            </button>
+                     <th class="py-1 px-2 w-40">Cena
+                        <a href="{{ route('imprimir.dietas', ['horario' => 'cena']) }}" target="_blank" class="bg-violet-500 text-white px-2 py-0.5 rounded text-[0.6rem] hover:bg-violet-700 transition inline-flex items-center justify-center">
+                            🖨️
+                        </a>
                         </th>
                         <th class="py-1 px-2 w-40">Indicaciones</th>
                         <th class="py-1 px-2 w-40">Diagnóstico</th>
@@ -125,9 +124,7 @@
                                     </div>
                                 </td>
 
-                                <td class="py-0 px-0 w-16" >
-                                    <input type="date" wire:model="editedData.fecha_registro" class="w-full px-0.5 py-0.5 border rounded text-[0.6rem]" readonly>
-                                </td>
+                                <td class="py-0 px-0 w-16  text-[0.6rem]">{{ $record->fecha_registro }}</td>
 
                                 <td class="py-1 px-2">
                                     <div class="flex items-center space-x-2">
@@ -188,7 +185,7 @@
                                     <textarea rows="4" cols="50" type="text" wire:model="editedData.diagnostico" class="w-full px-1 py-0.5 border rounded text-xs" placeholder="Diagnóstico"></textarea>
                                 </td>
                                 <td class="py-1 px-2 w-24 flex gap-1">
-                                    <button wire:click="saveRow" class="bg-green-500 text-white px-2 py-1 rounded-md text-[0.6rem]">
+                                    <button wire:click="saveRow" class="bg-green-500 text-white px-2 py-1 rounded text-[0.6rem]">
                                         💾 Guardar
                                     </button>
                                     <button wire:click="cancelEdit()" class="bg-gray-500 text-white px-1 py-0.5 rounded text-[0.6rem] hover:bg-gray-600 transition">
@@ -200,7 +197,7 @@
                                 <td class="py-1 px-2">
                                     {{ $record->patient->nombre ?? 'N/A' }} {{ $record->patient->apellido ?? '' }}
                                 </td>
-                                <td class="py-1 px-2">{{ $record->fecha_registro }}</td>
+                                <td class="py-1 px-2">{{ $record->fecha_registro->format('Y-m-d')}}</td>
                                 <td class="py-1 px-2">{{ $record->desayuno ?: 'No registrado' }}</td>
                                 <td class="py-1 px-2">{{ $record->am10 ?: 'No registrado' }}</td>
                                 <td class="py-1 px-2">{{ $record->almuerzo ?: 'No registrado' }}</td>

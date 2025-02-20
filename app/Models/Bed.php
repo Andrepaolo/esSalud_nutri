@@ -9,7 +9,7 @@ class Bed extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['area_id', 'numero'];
+    protected $fillable = ['area_id', 'codigo'];
 
     public function area()
     {

@@ -15,6 +15,7 @@ class DailyRecord extends Model
         'indicaciones', 'diagnostico'
     ];
     protected $casts = [
+        'fecha_registro' => 'date',
         'desayuno' => 'array',
         'am10' => 'array',
         'almuerzo' => 'array',
