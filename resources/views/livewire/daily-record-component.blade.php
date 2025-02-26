@@ -21,6 +21,7 @@
                     class="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded-md shadow-md transition transform hover:scale-105 text-xs">
                 🔍 Filtrar
             </button>
+            
 
             <div>
                 <label for="searchBox" class="block text-xs font-medium text-gray-700">🔍 Buscar:</label>
@@ -37,29 +38,29 @@
                         <th class="py-1 px-2 w-48">Paciente</th>
                         <th class="py-1 px-2 w-24">Fecha</th>
                         <th class="py-1 px-2 w-40">Desayuno
-                            <a href="{{ route('imprimir.dietas', ['horario' => 'desayuno']) }}" target="_blank" class="bg-violet-500 text-white px-2 py-0.5 rounded text-[0.6rem] hover:bg-violet-700 transition inline-flex items-center justify-center">
+                            <a href="{{ route('imprimir.dietas', ['horario' => 'desayuno']) }}?{{ http_build_query(['areaId' => $selectedArea, 'search' => $search, 'selectedDate' => $selectedDate]) }}" target="_blank" class="bg-violet-500 text-white px-2 py-0.5 rounded text-[0.6rem] hover:bg-violet-700 transition inline-flex items-center justify-center">
                                 🖨️
                             </a>
                         </th>
                         <th class="py-1 px-2 w-40">10 AM
-                            <a href="{{ route('imprimir.dietas', ['horario' => 'am10']) }}" target="_blank" class="bg-violet-500 text-white px-2 py-0.5 rounded text-[0.6rem] hover:bg-violet-700 transition inline-flex items-center justify-center">
+                            <a href="{{ route('imprimir.dietas', ['horario' => 'am10']) }}?{{ http_build_query(['areaId' => $selectedArea, 'search' => $search, 'selectedDate' => $selectedDate]) }}" target="_blank" class="bg-violet-500 text-white px-2 py-0.5 rounded text-[0.6rem] hover:bg-violet-700 transition inline-flex items-center justify-center">
                                 🖨️
                             </a>
                         </th>
                         <th class="py-1 px-2 w-40">Almuerzo
-                            <a href="{{ route('imprimir.dietas', ['horario' => 'almuerzo']) }}" target="_blank" class="bg-violet-500 text-white px-2 py-0.5 rounded text-[0.6rem] hover:bg-violet-700 transition inline-flex items-center justify-center">
+                            <a href="{{ route('imprimir.dietas', ['horario' => 'almuerzo']) }}?{{ http_build_query(['areaId' => $selectedArea, 'search' => $search, 'selectedDate' => $selectedDate]) }}" target="_blank" class="bg-violet-500 text-white px-2 py-0.5 rounded text-[0.6rem] hover:bg-violet-700 transition inline-flex items-center justify-center">
                                 🖨️
                             </a>
                         </th>
                         <th class="py-1 px-2 w-40">4 PM
-                            <a href="{{ route('imprimir.dietas', ['horario' => 'pm4']) }}" target="_blank" class="bg-violet-500 text-white px-2 py-0.5 rounded text-[0.6rem] hover:bg-violet-700 transition inline-flex items-center justify-center">
+                            <a href="{{ route('imprimir.dietas', ['horario' => 'pm4']) }}?{{ http_build_query(['areaId' => $selectedArea, 'search' => $search, 'selectedDate' => $selectedDate]) }}" target="_blank" class="bg-violet-500 text-white px-2 py-0.5 rounded text-[0.6rem] hover:bg-violet-700 transition inline-flex items-center justify-center">
                                 🖨️
                             </a>
                         </th>
-                     <th class="py-1 px-2 w-40">Cena
-                        <a href="{{ route('imprimir.dietas', ['horario' => 'cena']) }}" target="_blank" class="bg-violet-500 text-white px-2 py-0.5 rounded text-[0.6rem] hover:bg-violet-700 transition inline-flex items-center justify-center">
-                            🖨️
-                        </a>
+                        <th class="py-1 px-2 w-40">Cena
+                            <a href="{{ route('imprimir.dietas', ['horario' => 'cena']) }}?{{ http_build_query(['areaId' => $selectedArea, 'search' => $search, 'selectedDate' => $selectedDate]) }}" target="_blank" class="bg-violet-500 text-white px-2 py-0.5 rounded text-[0.6rem] hover:bg-violet-700 transition inline-flex items-center justify-center">
+                                🖨️
+                            </a>
                         </th>
                         <th class="py-1 px-2 w-40">Indicaciones</th>
                         <th class="py-1 px-2 w-40">Diagnóstico</th>
@@ -237,4 +238,5 @@
             {{ $records->links() }}
         </div>
     </div>
+    
 </div>

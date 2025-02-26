@@ -9,8 +9,10 @@ use App\Models\DailyRecord;
 use App\Models\Diet;
 use App\Models\Patient;
 use Carbon\Carbon;
+use Illuminate\Http\Request;
 use Livewire\Component;
 use Livewire\WithPagination;
+use Illuminate\Pagination\LengthAwarePaginator;
 
 
 class DailyRecordComponent extends Component
@@ -42,8 +44,8 @@ class DailyRecordComponent extends Component
     public int $recordIdToMove = 0;
     public $destinationBeds = [];
     public $selectedDestinationBedId = null;
-    public $selectedBedCode = null; // Opcional: Para sincronizar código de cama seleccionada con Livewire
-    public $selectedAreaName = null; // Opcional: Para sincronizar nombre de área de cama seleccionada con Livewire 
+    public $selectedBedCode = null; 
+    public $selectedAreaName = null; 
 
     protected $rules = [
         'bed_id' => 'required|exists:beds,id',
@@ -94,7 +96,7 @@ class DailyRecordComponent extends Component
         $selectedDietNames = Diet::whereIn('id', $this->selectedDiets)->pluck('name')->toArray();
 
         // Actualiza editedData con los nombres de las dietas
-        $this->editedData[$this->currentMeal] = implode('+ ', $selectedDietNames);
+        $this->editedData[$this->currentMeal] = implode(' ', $selectedDietNames);
 
         $record = DailyRecord::find($this->registroId);
         if ($record) {
@@ -253,7 +255,7 @@ class DailyRecordComponent extends Component
             });
         }
     
-        $records = $query->orderBy('fecha_registro', 'desc')->paginate(20);
+        $records = $query->orderBy('fecha_registro', 'asc')->paginate(21);
         
         $areas = Area::all(); // Para el select de áreas
     
@@ -351,6 +353,12 @@ class DailyRecordComponent extends Component
     {
         $beds = Bed::all();
         $today = now()->toDateString();
+        $yesterday = now()->subDay()->toDateString(); // Obtener la fecha de ayer
+
+        // Obtener los registros de ayer para todas las camas
+        $yesterdayRecords = DailyRecord::whereDate('fecha_registro', $yesterday)
+                                            ->get()
+                                            ->keyBy('bed_id'); // Indexar por bed_id para acceso rápido
 
         foreach ($beds as $bed) {
             // Verificar si ya existe un registro para esta cama hoy
@@ -359,9 +367,16 @@ class DailyRecordComponent extends Component
                                 ->exists();
 
             if (!$exists) {
+                $patientIdYesterday = null; // Inicialmente no hay paciente del día anterior
+
+                // Verificar si había un registro ayer para esta cama y si tenía paciente
+                if (isset($yesterdayRecords[$bed->id]) && $yesterdayRecords[$bed->id]->patient_id) {
+                    $patientIdYesterday = $yesterdayRecords[$bed->id]->patient_id;
+                }
+
                 DailyRecord::create([
                     'bed_id' => $bed->id,
-                    'patient_id' => null, // Se asignará manualmente si hay paciente
+                    'patient_id' => $patientIdYesterday, // Usar el patientId del registro de ayer (si existe) o null
                     'fecha_registro' => $today,
                     'desayuno' => null,
                     'am10' => null,
@@ -470,45 +485,82 @@ class DailyRecordComponent extends Component
     }
 //---------------------------------------------------Mover Pacientes Fin---------------------------------------------
 //---------------------------- Imprimir Dietas - INICIO ---------------------------------------
-    public function imprimirDietas($horario, $areaId = null)
-    {
-        $registrosDiarios = DailyRecord::with(['bed.area', 'patient'])
-            ->whereDate('fecha_registro', Carbon::today());
 
+
+    public function imprimirDietas($horario, Request $request)
+    {
+        $query = DailyRecord::query()->with(['bed.area', 'patient']);
+
+        // --- FILTRO DE FECHA DESDE URL --- (Sigue igual)
+        $selectedDate = $request->query('selectedDate');
+        if ($selectedDate) {
+            $query->whereDate('fecha_registro', $selectedDate);
+        }
+
+        // --- FILTRO DE ÁREA DESDE URL --- (Sigue igual)
+        $areaId = $request->query('areaId');
         if ($areaId) {
-            $registrosDiarios->whereHas('bed.area', function ($query) use ($areaId) {
-                $query->where('id', $areaId);
+            $query->whereHas('bed.area', function ($q) use ($areaId) {
+                $q->where('areas.id', $areaId);
             });
         }
 
-        // --- NUEVO FILTRO:  Solo registros con dieta NO vacía para el horario ---
+        // --- FILTROS DE BÚSQUEDA (opcional) --- (Sigue igual si lo tienes descomentado)
+        $search = $request->query('search');
+        if ($search) { /* ... (tu código de filtro de búsqueda) ... */ }
+        // ------------------------------------------------------
+
+
+        // --- FILTRO POR HORARIO Y EXCLUIR REGISTROS VACÍOS ---  (MODIFICACIÓN IMPORTANTE)
         switch ($horario) {
             case 'desayuno':
-                $registrosDiarios->whereNotNull('desayuno');
+                $query->whereNotNull('desayuno'); // <-- Añadido: Solo registros con desayuno NO nulo
                 break;
             case 'am10':
-                $registrosDiarios->whereNotNull('am10');
+                $query->whereNotNull('am10');     // <-- Añadido: Solo registros con am10 NO nulo
                 break;
             case 'almuerzo':
-                $registrosDiarios->whereNotNull('almuerzo');
+                $query->whereNotNull('almuerzo');  // <-- Añadido: Solo registros con almuerzo NO nulo
                 break;
             case 'cena':
-                $registrosDiarios->whereNotNull('cena');
+                $query->whereNotNull('cena');      // <-- Añadido: Solo registros con cena NO nulo
                 break;
             case 'pm4':
-                $registrosDiarios->whereNotNull('pm4');
+                $query->whereNotNull('pm4');       // <-- Añadido: Solo registros con pm4 NO nulo
                 break;
         }
-        // -----------------------------------------------------------------------
+        // -------------------------------------------------------------------
 
 
-        $registrosDiarios = $registrosDiarios->get();
+        $registrosDiariosSinPaginacion = $query->get();
 
-        if ($registrosDiarios->isEmpty()) {
-            return null;
+        // --- AGRUPAR POR ÁREA y PAGINAR --- (Sigue igual)
+        $registrosAgrupadosPorArea = $registrosDiariosSinPaginacion->groupBy('bed.area.nombre');
+        $registrosPorAreaPaginados = [];
+        $perPage = 20;
+        $currentPage = 1;
+        foreach ($registrosAgrupadosPorArea as $areaNombre => $registrosDeArea) {
+            $currentPageItems = $registrosDeArea->slice(($currentPage - 1) * $perPage, $perPage)->values();
+            $registrosPaginados = new LengthAwarePaginator(
+                $currentPageItems,
+                $registrosDeArea->count(),
+                $perPage,
+                $currentPage,
+                ['path' => route('imprimir.dietas', ['horario' => $horario])]
+            );
+            $registrosPorAreaPaginados[$areaNombre] = $registrosPaginados;
         }
 
-        // --- MODIFICACIÓN IMPORTANTE: Pasar el nombre de la dieta a la vista ---
+
+        return view('livewire.imprimir-dietas', [
+            'registrosPorAreaPaginados' => $registrosPorAreaPaginados,
+            'horario' => $horario,
+            'nombreDietaHorario' => $this->getNombreDietaHorario($horario),
+        ]);
+    }
+
+    private function getNombreDietaHorario($horario)
+    {
         $nombreDietaHorario = '';
         switch ($horario) {
             case 'desayuno':
@@ -530,16 +582,8 @@ class DailyRecordComponent extends Component
                 $nombreDietaHorario = 'Dieta'; // Genérico si no coincide con ningún horario conocido
                 break;
         }
-        // ------------------------------------------------------------------------
-
-
-        return view('livewire.imprimir-dietas', [
-            'registrosDiarios' => $registrosDiarios,
-            'horario' => $horario,
-            'areaId' => $areaId,
-            'nombreDietaHorario' => $nombreDietaHorario, // <-- PASAR nombreDietaHorario a la vista
-        ]);
-    } 
+        return $nombreDietaHorario;
+    }
 //---------------------------- Imprimir Dietas - FIN ------------------------------------------
     
 

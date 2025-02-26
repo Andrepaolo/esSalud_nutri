@@ -1,0 +1,8 @@
+Copyright © 2025 Andre Paolo Luque Alfaro. Todos los derechos reservados.
+
+Este software es propiedad intelectual de Andre Paolo Luque Alfaro.
+Se concede una licencia de uso limitada y no exclusiva al encargado de nutrición para el propósito específico de uso en el hospital II de Tarapoto.
+
+Queda expresamente prohibida la copia, reproducción, distribución, modificación, ingeniería inversa, o cualquier otra forma de explotación comercial o no comercial de este software, en su totalidad o en parte, sin el consentimiento previo y por escrito de Andre Paolo Luque Alfaro.
+
+Para cualquier consulta o solicitud de licencia adicional, por favor contactar a andrepaol32@gmail.com

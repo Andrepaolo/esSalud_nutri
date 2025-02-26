@@ -11,9 +11,8 @@
             <input type="text" wire:model.live="search" placeholder="🔍 Buscar área..." 
                 class="px-3 py-2 border rounded-lg w-full sm:w-2/3 shadow focus:ring-2 focus:ring-blue-400 outline-none">
             
-            <button wire:click="create()" 
-                class="bg-green-500 hover:bg-slate-700 text-white px-4 py-1.5 rounded-md shadow-md transition transform hover:scale-105 text-sm">
-                ➕ Nueva Área
+            <button type="button" wire:click="create()" 
+                class="bg-green-500 hover:bg-slate-700 text-white px-4 py-1.5 rounded-md shadow-md transition transform hover:scale-105 text-sm">➕ Nueva Área
             </button>
             <button wire:click="exportToExcel()"
                 class="bg-green-500 hover:bg-slate-700 text-white px-4 py-1.5 rounded-md shadow-md transition transform hover:scale-105 text-sm">
@@ -23,7 +22,34 @@
 
         <!-- Modal para Agregar Área -->
         @if($isOpen)
-            @include('livewire.add.add-areas')
+            <x-dialog-modal wire:model.defer="isOpen" :close-on-click-away="false">  <x-slot name="title">
+                    <h3>{{ $area['id'] ? 'Editar Área' : 'Añadir Nueva Área' }}</h3>
+                </x-slot>
+
+                <x-slot name="content">
+                    <form wire:submit.prevent="store" id="area-form">
+                        <div class="mb-4">
+                            <x-label value="Nombre del Área" class="font-bold" />
+                            <x-input type="text" wire:model.defer="area.nombre" class="w-full" />
+                            <x-input-error for="area.nombre" />
+                        </div>
+                        <div class="mb-4">
+                            <x-label value="pequeña descripción" class="font-bold" />
+                            <x-input type="text" wire:model.defer="area.description" class="w-full" />
+                            <x-input-error for="area.description" />
+                        </div>
+                    </form>
+                </x-slot>
+
+                <x-slot name="footer">
+                    <x-secondary-button wire:click="$set('isOpen', false)" class="mx-2">
+                        Cancelar
+                    </x-secondary-button>
+                    <x-button type="submit" class="ml-2" form="area-form" wire:loading.attr="disabled" wire:target="store">
+                        Guardar
+                    </x-button>
+                </x-slot>
+            </x-dialog-modal>
         @endif
 
         <!-- Tarjetas de Áreas -->
@@ -44,7 +70,7 @@
                             🗑 Eliminar
                         </button>
 
-                        <button wire:click="{{ route('dashboard') }}"
+                        <button wire:click=""
                             class="bg-blue-500 text-white px-3 py-1 rounded-md shadow-md transition hover:bg-blue-600 text-xs">
                             🛏 Ver Camas
 

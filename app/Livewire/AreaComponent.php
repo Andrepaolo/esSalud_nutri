@@ -21,6 +21,11 @@ class AreaComponent extends Component
         'area.nombre' => 'required',
         'area.description' => 'required',
     ];
+    public function mount()
+    {
+        $this->isOpen = false;
+        $this->area = ['id' => '', 'nombre' => '', 'description' => ''];
+    }
 
     public function render()
     {
@@ -39,6 +44,7 @@ class AreaComponent extends Component
 
     public function create()
     {
+        //dd('Modal abierto');
         $this->isOpen = true;
         $this->area = ['id' => null];
         $this->resetErrorBag();
@@ -64,8 +70,8 @@ class AreaComponent extends Component
         }
 
         $this->resetComponent();
-        $this->dispatch('alert', type: 'success', title: $message, position: 'center');
-        $this->dispatch('close-modal');
+        //$this->dispatch('alert', type: 'success', title: $message, position: 'center');
+        //$this->dispatch('close-modal');
     }
 
     public function edit($areaId)

@@ -16,7 +16,10 @@ return new class extends Migration
             $table->string('nombre');
             $table->string('apellido');
             $table->date('fecha_nacimiento');
-            $table->string('dni')->unique();    
+            $table->string('dni')->unique();
+            $table->decimal('peso', 5, 2)->nullable();  // Peso del paciente, decimal, puede ser nulo
+            $table->decimal('talla', 5, 2)->nullable(); // Talla del paciente, decimal, puede ser nula
+            $table->decimal('imc', 5, 2)->nullable();   
             $table->timestamps();
         });
     }

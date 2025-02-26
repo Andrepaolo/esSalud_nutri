@@ -66,66 +66,66 @@ class DatabaseSeeder extends Seeder
         Bed::create(['area_id' => 1, 'codigo' => 'A1M']);
 
         // Observación 1 (id = 2)
-        Bed::create(['area_id' => 2, 'codigo' => 'O1-1']);
-        Bed::create(['area_id' => 2, 'codigo' => 'O1-2']);
-        Bed::create(['area_id' => 2, 'codigo' => 'O1-3']);
-        Bed::create(['area_id' => 2, 'codigo' => 'O1-4']);
-        Bed::create(['area_id' => 2, 'codigo' => 'O1-5']);
-        Bed::create(['area_id' => 2, 'codigo' => 'O1-6']);
-        Bed::create(['area_id' => 2, 'codigo' => 'O1-7']);
-        Bed::create(['area_id' => 2, 'codigo' => 'O1-8']);
-        Bed::create(['area_id' => 2, 'codigo' => 'O1-9']);
-        Bed::create(['area_id' => 2, 'codigo' => 'O1-10']);
-        Bed::create(['area_id' => 2, 'codigo' => 'O1-11']);
-        Bed::create(['area_id' => 2, 'codigo' => 'O1-12']);
-        Bed::create(['area_id' => 2, 'codigo' => 'O1-13']);
-        Bed::create(['area_id' => 2, 'codigo' => 'O1-14']);
-        Bed::create(['area_id' => 2, 'codigo' => 'O1-15']);
+        Bed::create(['area_id' => 2, 'codigo' => '1-O1']);
+        Bed::create(['area_id' => 2, 'codigo' => '2-O1']);
+        Bed::create(['area_id' => 2, 'codigo' => '3-O1']);
+        Bed::create(['area_id' => 2, 'codigo' => '4-O1']);
+        Bed::create(['area_id' => 2, 'codigo' => '5-O1']);
+        Bed::create(['area_id' => 2, 'codigo' => '6-O1']);
+        Bed::create(['area_id' => 2, 'codigo' => '7-O1']);
+        Bed::create(['area_id' => 2, 'codigo' => '8-O1']);
+        Bed::create(['area_id' => 2, 'codigo' => '9-O1']);
+        Bed::create(['area_id' => 2, 'codigo' => '10-O1']);
+        Bed::create(['area_id' => 2, 'codigo' => '11-O1']);
+        Bed::create(['area_id' => 2, 'codigo' => '12-O1']);
+        Bed::create(['area_id' => 2, 'codigo' => '13-O1']);
+        Bed::create(['area_id' => 2, 'codigo' => '14-O1']);
+        Bed::create(['area_id' => 2, 'codigo' => '15-O1']);
 
         // Observación 2 (id = 3)
-        Bed::create(['area_id' => 3, 'codigo' => 'O2-1']);
-        Bed::create(['area_id' => 3, 'codigo' => 'O2-2']);
-        Bed::create(['area_id' => 3, 'codigo' => 'O2-3']);
-        Bed::create(['area_id' => 3, 'codigo' => 'O2-4']);
-        Bed::create(['area_id' => 3, 'codigo' => 'O2-5']);
-        Bed::create(['area_id' => 3, 'codigo' => 'O2-6']);
-        Bed::create(['area_id' => 3, 'codigo' => 'O2-7']);
-        Bed::create(['area_id' => 3, 'codigo' => 'O2-8P']);
-        Bed::create(['area_id' => 3, 'codigo' => 'O2-9P']);
-        Bed::create(['area_id' => 3, 'codigo' => 'O2-10P']);
-        Bed::create(['area_id' => 3, 'codigo' => 'O2-11P']);
-        Bed::create(['area_id' => 3, 'codigo' => 'O2-12P']);
-        Bed::create(['area_id' => 3, 'codigo' => 'O2-13']);
-        Bed::create(['area_id' => 3, 'codigo' => 'O2-14']);
-        Bed::create(['area_id' => 3, 'codigo' => 'O2-15']);
+        Bed::create(['area_id' => 3, 'codigo' => '1-O2']);
+        Bed::create(['area_id' => 3, 'codigo' => '2-O2']);
+        Bed::create(['area_id' => 3, 'codigo' => '3-O2']);
+        Bed::create(['area_id' => 3, 'codigo' => '4-O2']);
+        Bed::create(['area_id' => 3, 'codigo' => '5-O2']);
+        Bed::create(['area_id' => 3, 'codigo' => '6-O2']);
+        Bed::create(['area_id' => 3, 'codigo' => '7-O2']);
+        Bed::create(['area_id' => 3, 'codigo' => '8P-O2']);
+        Bed::create(['area_id' => 3, 'codigo' => '9P-O2']);
+        Bed::create(['area_id' => 3, 'codigo' => '10P-O2']);
+        Bed::create(['area_id' => 3, 'codigo' => '11P-O2']);
+        Bed::create(['area_id' => 3, 'codigo' => '12P-O2']);
+        Bed::create(['area_id' => 3, 'codigo' => '13-O2']);
+        Bed::create(['area_id' => 3, 'codigo' => '14-O2']);
+        Bed::create(['area_id' => 3, 'codigo' => '15-O2']);
 
         // UVI-2 (id = 4)
-        Bed::create(['area_id' => 4, 'codigo' => 'U2-1']);
-        Bed::create(['area_id' => 4, 'codigo' => 'U2-2']);
-        Bed::create(['area_id' => 4, 'codigo' => 'U2-3']);
-        Bed::create(['area_id' => 4, 'codigo' => 'U4-4']);
+        Bed::create(['area_id' => 4, 'codigo' => '1-O2']);
+        Bed::create(['area_id' => 4, 'codigo' => '2-O2']);
+        Bed::create(['area_id' => 4, 'codigo' => '3-O2']);
+        Bed::create(['area_id' => 4, 'codigo' => '4-O2']);
 
         // TraumaShock (id = 5)
-        Bed::create(['area_id' => 5, 'codigo' => 'TS-1']);
-        Bed::create(['area_id' => 5, 'codigo' => 'TS-2']);
-        Bed::create(['area_id' => 5, 'codigo' => 'TS-3']);
+        Bed::create(['area_id' => 5, 'codigo' => '1-TS']);
+        Bed::create(['area_id' => 5, 'codigo' => '2-TS']);
+        Bed::create(['area_id' => 5, 'codigo' => '3-TS']);
 
         // Tópico (id = 6)
-        Bed::create(['area_id' => 6, 'codigo' => 'TOI-1']);
-        Bed::create(['area_id' => 6, 'codigo' => 'TOI-2']);
-        Bed::create(['area_id' => 6, 'codigo' => 'TOI-3']);
-        Bed::create(['area_id' => 6, 'codigo' => 'TOI-4']);
-        Bed::create(['area_id' => 6, 'codigo' => 'TOI-5']);
-        Bed::create(['area_id' => 6, 'codigo' => 'TOI-6']);
-        Bed::create(['area_id' => 6, 'codigo' => 'TOI-7']);
-        Bed::create(['area_id' => 6, 'codigo' => 'TOI-8']);
-        Bed::create(['area_id' => 6, 'codigo' => 'TOI-9']);
-        Bed::create(['area_id' => 6, 'codigo' => 'TOI-10']);
-        Bed::create(['area_id' => 6, 'codigo' => 'TOC-1']);
-        Bed::create(['area_id' => 6, 'codigo' => 'TOC-2']);
-        Bed::create(['area_id' => 6, 'codigo' => 'TOC-3']);
-        Bed::create(['area_id' => 6, 'codigo' => 'TOC-4']);
-        Bed::create(['area_id' => 6, 'codigo' => 'TOC-5']);
+        Bed::create(['area_id' => 6, 'codigo' => '1-TOI']);
+        Bed::create(['area_id' => 6, 'codigo' => '2-TOI']);
+        Bed::create(['area_id' => 6, 'codigo' => '3-TOI']);
+        Bed::create(['area_id' => 6, 'codigo' => '4-TOI']);
+        Bed::create(['area_id' => 6, 'codigo' => '5-TOI']);
+        Bed::create(['area_id' => 6, 'codigo' => '6-TOI']);
+        Bed::create(['area_id' => 6, 'codigo' => '7-TOI']);
+        Bed::create(['area_id' => 6, 'codigo' => '8-TOI']);
+        Bed::create(['area_id' => 6, 'codigo' => '9-TOI']);
+        Bed::create(['area_id' => 6, 'codigo' => '10-TOI']);
+        Bed::create(['area_id' => 6, 'codigo' => '1-TOC']);
+        Bed::create(['area_id' => 6, 'codigo' => '2-TOC']);
+        Bed::create(['area_id' => 6, 'codigo' => '3-TOC']);
+        Bed::create(['area_id' => 6, 'codigo' => '4-TOC']);
+        Bed::create(['area_id' => 6, 'codigo' => '5-TOC']);
 
         // CIRUGIA (id = 7)
         Bed::create(['area_id' => 7, 'codigo' => '211-AC']);
@@ -196,10 +196,10 @@ class DatabaseSeeder extends Seeder
         Bed::create(['area_id' => 11, 'codigo' => '10-CO']);
 
         // UVI-1 (id = 12)
-        Bed::create(['area_id' => 12, 'codigo' => 'U1-1']);
-        Bed::create(['area_id' => 12, 'codigo' => 'U1-2']);
-        Bed::create(['area_id' => 12, 'codigo' => 'U1-3']);
-        Bed::create(['area_id' => 12, 'codigo' => 'U1-4']);
+        Bed::create(['area_id' => 12, 'codigo' => '1-U1']);
+        Bed::create(['area_id' => 12, 'codigo' => '2-U1']);
+        Bed::create(['area_id' => 12, 'codigo' => '3-U1']);
+        Bed::create(['area_id' => 12, 'codigo' => '4-U1']);
 
         //Paciente
 
@@ -341,8 +341,8 @@ class DatabaseSeeder extends Seeder
             'almuerzo' => '2000 KCAL/DÍA',
             'pm4' => '2000 KCAL/DÍA',
             'cena' => '2000 KCAL/DÍA',
-            'indicaciones' => 'haga lo siguiente',
-            'diagnostico' => 'todo bien ',
+            'indicaciones' => 'debe reposar y tomar pastillas',
+            'diagnostico' => 'puesto para el alta ',
             
         ]);
 

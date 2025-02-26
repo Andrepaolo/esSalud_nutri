@@ -47,7 +47,8 @@ class CrudBed extends Component
 
 
         $beds = $query->orderBy('id', $this->sortDirection)
-                     ->paginate(21); // Paginación
+                     ->paginate(21)
+                     ->onEachside(3); // Paginación
 
         $areas = Area::all(); // Para el filtro de área en la vista
 

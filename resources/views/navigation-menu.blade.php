@@ -21,9 +21,10 @@
                         {{ __('Records diarios') }}
                     </x-nav-link>
                 </div>
+                
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                    <x-nav-link href="{{ route('beds.index') }}" :active="request()->routeIs('beds.index')">
-                        {{ __('Camas') }}
+                    <x-nav-link href="{{ route('beds.patients') }}" :active="request()->routeIs('beds.patients')">
+                        {{ __('Camas y Pacientes') }} {{-- Enlace al nuevo página combinada --}}
                     </x-nav-link>
                 </div>
                 
@@ -144,6 +145,9 @@
                         <path :class="{'hidden': ! open, 'inline-flex': open }" class="hidden" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
                     </svg>
                 </button>
+            </div>
+            <div class="hidden sm:flex sm:items-center ms-4 text-gray-500 text-sm">
+                &copy; {{ date('Y') }} Andre Paolo Luque Alfaro.<br> Todos los derechos reservados.
             </div>
         </div>
     </div>

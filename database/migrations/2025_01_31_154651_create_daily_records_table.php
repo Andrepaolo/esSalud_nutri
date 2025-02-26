@@ -23,6 +23,10 @@ return new class extends Migration
             $table->string('cena')->nullable();
             $table->text('indicaciones')->nullable();
             $table->text('diagnostico')->nullable();
+            $table->index('fecha_registro'); // Índice en la columna fecha_registro
+            $table->index('bed_id');         // Índice en la columna bed_id
+            $table->index('patient_id');     // Índice en la columna patient_id (si se utiliza para búsquedas)
+            $table->index(['fecha_registro', 'bed_id']); // Índice compuesto: fecha_registro y bed_id (útil para filtros combinados)
             $table->timestamps();
         });
     }

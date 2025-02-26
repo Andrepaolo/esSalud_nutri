@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -9,7 +10,14 @@ class Patient extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['nombre', 'apellido', 'fecha_nacimiento', 'dni', 'telefono'];
+    protected $fillable = [
+        'nombre',          // Asegúrate de que estén todos los campos de la tabla patients (excepto id, timestamps)
+        'apellido',
+        'fecha_nacimiento',
+        'dni',
+        'peso',
+        'talla',
+        'imc',];
 
     public function medicalRecord()
     {
@@ -24,4 +32,15 @@ class Patient extends Model
     {
         return $this->nombre . ' ' . $this->apellido;
     }
+    
+    public function getEdadAttribute()
+    {
+        if ($this->fecha_nacimiento) {
+            return Carbon::parse($this->fecha_nacimiento)->age;
+        }
+        return null;
+    }
+
+
+    
 }
