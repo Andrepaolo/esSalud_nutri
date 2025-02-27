@@ -9,7 +9,9 @@ export default defineConfig({
         }),
     ],
     server: {
-        https:false,
+        https: mode === 'production', // Activa HTTPS solo en producción
+        host: '0.0.0.0', // Asegura que se escuche en todos los hosts
+        port: 5173
     },
     
 });
