@@ -1,6 +1,6 @@
 <?php
 
-namespace Illuminate\Contracts\View;
+namespace App\Helpers;
 
 use Illuminate\Contracts\Support\Renderable;
 

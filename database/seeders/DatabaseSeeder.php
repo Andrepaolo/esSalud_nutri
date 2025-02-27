@@ -100,10 +100,10 @@ class DatabaseSeeder extends Seeder
         Bed::create(['area_id' => 3, 'codigo' => '15-O2']);
 
         // UVI-2 (id = 4)
-        Bed::create(['area_id' => 4, 'codigo' => '1-O2']);
-        Bed::create(['area_id' => 4, 'codigo' => '2-O2']);
-        Bed::create(['area_id' => 4, 'codigo' => '3-O2']);
-        Bed::create(['area_id' => 4, 'codigo' => '4-O2']);
+        Bed::create(['area_id' => 4, 'codigo' => '1-UV2']);
+        Bed::create(['area_id' => 4, 'codigo' => '2-UV2']);
+        Bed::create(['area_id' => 4, 'codigo' => '3-UV2']);
+        Bed::create(['area_id' => 4, 'codigo' => '4-UV2']);
 
         // TraumaShock (id = 5)
         Bed::create(['area_id' => 5, 'codigo' => '1-TS']);
