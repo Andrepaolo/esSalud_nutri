@@ -18,7 +18,7 @@
         @livewireStyles
     </head>
     <body>
-        <div class="font-sans text-gray-900 antialiased">
+        <div class="font-sans text-gray-900 antialiased" style="background-image: url('{{ asset('images/h2jpg.jpg') }}'); background-size: cover; background-position: center; min-height: 100vh; display: flex; justify-content: center; align-items: center;">
             {{ $slot }}
         </div>
 

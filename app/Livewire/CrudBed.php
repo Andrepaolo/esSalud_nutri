@@ -54,7 +54,7 @@ class CrudBed extends Component
 
 
         return view('livewire.crud-bed', compact('beds', 'areas'))
-            ->layout('layouts.app'); // Pasa $areas a la vista
+            ; // Pasa $areas a la vista
     }
 
 

@@ -70,11 +70,10 @@
                             🗑 Eliminar
                         </button>
 
-                        <button wire:click=""
-                            class="bg-blue-500 text-white px-3 py-1 rounded-md shadow-md transition hover:bg-blue-600 text-xs">
-                            🛏 Ver Camas
-
-                        </button>
+                        <a href="{{ route('drecords') }}"
+                            class="bg-blue-500 text-white px-3 py-1 rounded-md shadow-md transition hover:bg-blue-600 text-xs inline-block text-center">
+                                🛏 Ver Camas
+                        </a>
                     </div>
                 </div>
             @endforeach

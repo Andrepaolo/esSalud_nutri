@@ -38,10 +38,11 @@ class AreaDailyRecordsSheet implements FromArray, WithTitle
             ->whereHas('bed.area', function ($query) {
                 $query->where('id', $this->area->id); // Filtrar registros por el área actual
             })
+            ->whereDate('fecha_registro', now()->toDateString()) // Filtrar solo los registros de hoy
             ->get();
 
         $data = [
-            ['Cama', 'Paciente', 'Fecha Registro', 'Desayuno','Am10', 'Almuerzo','Pm4', 'Cena', 'Indicaciones', 'Diagnóstico'], // Encabezados
+            ['Cama', 'Paciente', 'Fecha Registro', 'Desayuno', 'Am10', 'Almuerzo', 'Pm4', 'Cena', 'Indicaciones', 'Diagnóstico'], // Encabezados
         ];
 
         foreach ($records as $record) {
@@ -61,4 +62,5 @@ class AreaDailyRecordsSheet implements FromArray, WithTitle
 
         return $data;
     }
+
 }

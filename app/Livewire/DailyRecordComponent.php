@@ -348,7 +348,7 @@ class DailyRecordComponent extends Component
         $this->indicaciones = '';
         $this->diagnostico = '';
     }
-    //generar los datos de todas las camas
+//generar los datos de todas las camas
     public function generateDailyRecords()
     {
         $beds = Bed::all();
