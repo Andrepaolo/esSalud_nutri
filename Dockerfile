@@ -14,6 +14,8 @@ RUN apt-get update && apt-get install -y \
     && docker-php-ext-install gd pdo pdo_mysql
 
 # Habilita mod_rewrite en Apache
+RUN curl -fsSL https://deb.nodesource.com/setup_18.x | bash - \
+    && apt-get install -y nodejs
 RUN a2enmod rewrite
 
 COPY 000-default.conf /etc/apache2/sites-available/000-default.conf
@@ -29,6 +31,7 @@ RUN chown -R www-data:www-data /var/www/html \
     
 # Establece el directorio de trabajo
 WORKDIR /var/www/html
+RUN npm install && npm run build
 
 # Exponer el puerto 80 del contenedor (puedes cambiarlo luego)
 EXPOSE 80
