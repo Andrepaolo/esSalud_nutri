@@ -255,7 +255,7 @@ class DailyRecordComponent extends Component
             });
         }
     
-        $records = $query->orderBy('fecha_registro', 'asc')->paginate(21);
+        $records = $query->orderBy('id', 'asc')->paginate(21);
         
         $areas = Area::all(); // Para el select de áreas
     

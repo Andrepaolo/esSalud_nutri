@@ -32,7 +32,7 @@ class DatabaseSeeder extends Seeder
         ]);
         User::create([
             'name'=>'Administrador Nutrición',
-            'email'=>'admin',
+            'email'=>'admin@123',
             'password'=>bcrypt('nutri2025')
         ]);
         Area::create(['nombre' => 'Medicina', 'description' => '1133']);

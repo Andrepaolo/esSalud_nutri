@@ -1,0 +1,32 @@
+# Ignorar archivos y carpetas innecesarios
+node_modules
+npm-debug.log
+yarn-error.log
+
+# Ignorar archivos de configuración locales
+.env
+.env.*.backup
+
+# Ignorar archivos de control de versiones
+.git
+.gitignore
+.gitattributes
+
+# Ignorar archivos de IDE y editores
+.vscode
+.idea
+*.swp
+*.swo
+
+# Ignorar archivos de pruebas locales
+tests/
+phpunit.xml
+phpunit.xml.dist
+
+# Ignorar cachés y logs
+storage/framework/cache/*
+storage/framework/sessions/*
+storage/framework/testing/*
+storage/framework/views/*
+storage/logs/*
+bootstrap/cache/*
