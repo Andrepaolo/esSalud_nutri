@@ -30,6 +30,11 @@ class DatabaseSeeder extends Seeder
             //'profile'=>'https://i.pinimg.com/564x/94/e5/32/94e5325468d2859b075bfabb4dc83c4e.jpg',
             'password'=>bcrypt('12345678')
         ]);
+        User::create([
+            'name'=>'Administrador Nutrición',
+            'email'=>'admin',
+            'password'=>bcrypt('nutri2025')
+        ]);
         Area::create(['nombre' => 'Medicina', 'description' => '1133']);
         Area::create(['nombre' => 'Observación 1', 'description' => 'null']);
         Area::create(['nombre' => 'Observación 2', 'description' => '1044']);
@@ -210,6 +215,8 @@ class DatabaseSeeder extends Seeder
             'dni'=>'73450173',
             
         ]);
+
+        /* 
         Patient::create([
             'nombre' => 'Fioerito', 
             'apellido' => 'Luque Alfaro',
@@ -272,7 +279,7 @@ class DatabaseSeeder extends Seeder
             'fecha_nacimiento'=>'2002-03-14',
             'dni'=>'12345678',
             
-        ]);
+        ]);*/
 
 
         //diet
