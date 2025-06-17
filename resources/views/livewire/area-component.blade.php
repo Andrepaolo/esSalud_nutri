@@ -53,12 +53,12 @@
         @endif
 
         <!-- Tarjetas de Áreas -->
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div id="sortable-areas" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             @foreach ($areas as $area)
-                <div class="bg-white shadow-md rounded-lg p-4 border border-gray-200 hover:shadow-lg transition">
+                <div class="bg-white shadow-md rounded-lg p-4 border border-gray-200 cursor-grab transition" data-id="{{ $area->id }}">
+
                     <h2 class="text-lg font-semibold text-blue-600">{{ $area->nombre }}</h2>
                     <p class="text-gray-600 mt-1 text-sm">{{ $area->description }}</p>
-                    
                     <div class="flex justify-between mt-3 space-x-2">
                         <button wire:click="edit({{ $area->id }})" 
                             class="bg-yellow-500 text-white px-3 py-1 rounded-md shadow-md transition hover:bg-yellow-600 text-xs">
@@ -70,7 +70,7 @@
                             🗑 Eliminar
                         </button>
 
-                        <a href="{{ route('drecords') }}"
+                        <a href="{{ route('drecords', ['area' => $area->id]) }}"
                             class="bg-blue-500 text-white px-3 py-1 rounded-md shadow-md transition hover:bg-blue-600 text-xs inline-block text-center">
                                 🛏 Ver Camas
                         </a>
@@ -89,16 +89,32 @@
 
     <!-- SweetAlert para alertas -->
     @push('js')
-    <script>
-        Livewire.on('alert', event => {
-            Swal.fire({
-                title: '¡Éxito!',
-                text: event.title,
-                icon: 'success',
-                confirmButtonText: 'Aceptar'
+        <!-- SortableJS -->
+        <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
+        
+        <script>
+            document.addEventListener('livewire:load', () => {
+                const el = document.getElementById('sortable-areas');
+
+                if (el) {
+                    new Sortable(el, {
+                        animation: 150
+                    });
+                }
             });
-        });
-    </script>
+        </script>
+
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+        <script>
+            Livewire.on('alert', event => {
+                Swal.fire({
+                    title: '¡Éxito!',
+                    text: event.title,
+                    icon: 'success',
+                    confirmButtonText: 'Aceptar'
+                });
+            });
+        </script>
     @endpush
 
     <!-- Componente de Camas -->

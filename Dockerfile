@@ -31,7 +31,8 @@ RUN chown -R www-data:www-data /var/www/html \
     
 # Establece el directorio de trabajo
 WORKDIR /var/www/html
-RUN npm install && npm run build
+RUN cd /var/www/html && npm install && npm run build
+
 
 # Exponer el puerto 80 del contenedor (puedes cambiarlo luego)
 EXPOSE 80

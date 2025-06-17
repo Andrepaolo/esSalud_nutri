@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('nombre');
             $table->string('description')->nullable()->default('Sin descripción');
+            $table->integer('orden')->default(0);
             $table->timestamps();
         });
     }

@@ -69,7 +69,7 @@
                 </thead>
                 <tbody>
                     @foreach ($records as $record)
-                        <tr class="border-b hover:bg-gray-100">
+                        <tr class="border-b hover:bg-gray-100" wire:key="daily-record-{{ $record->id }}">
                             @if ($editingRow === $record->id)
                                 <td class="py-1 px-2 font-medium">{{ $record->bed->codigo }}</td>
                                 <td class="py-1 px-2 w-52" x-data="{
@@ -129,50 +129,50 @@
 
                                 <td class="py-1 px-2">
                                     <div class="flex items-center space-x-2">
-                                        <textarea rows="3" cols="50" type="text" wire:model.defer="editedData.desayuno" readonly
+                                        <textarea rows="3" cols="50" type="text" wire:model.defer="editedData.desayuno" 
                                             class="w-full px-1 py-0.5 border rounded bg-gray-100 text-xs resize-y min-h-min" placeholder="Desayuno"></textarea>
-                                        <button wire:click="openDietModal('desayuno')"
-                                                class="bg-purple-500 text-white rounded-full p-1  hover:bg-red-600 transition-colors duration-200 ease-in-out">
+                                        <button wire:click="openDietModal({{ $record->id }}, 'desayuno')"
+                                            class="bg-purple-500 text-white rounded-full p-1 hover:bg-red-600 transition-colors duration-200 ease-in-out">
                                             🍏
                                         </button>
                                     </div>
                                 </td>
                                 <td class="py-1 px-2">
                                     <div class="flex items-center space-x-2">
-                                        <textarea rows="3" cols="50" type="text" wire:model.defer="editedData.am10" readonly
+                                        <textarea rows="3" cols="50" type="text" wire:model.defer="editedData.am10" 
                                             class="w-full px-1 py-0.5 border rounded bg-gray-100 text-xs resize-y min-h-min" placeholder="10 AM"></textarea>
-                                        <button wire:click="openDietModal('am10')"
-                                                class="bg-purple-500 text-white rounded-full p-1  hover:bg-red-600 transition-colors duration-200 ease-in-out">
+                                        <button wire:click="openDietModal({{ $record->id }}, 'am10')"
+                                            class="bg-purple-500 text-white rounded-full p-1 hover:bg-red-600 transition-colors duration-200 ease-in-out">
                                             🍏
                                         </button>
                                     </div>
                                 </td>
                                 <td class="py-1 px-2">
                                     <div class="flex items-center space-x-2">
-                                        <textarea rows="3" cols="50" type="text" wire:model.defer="editedData.almuerzo" readonly
+                                        <textarea rows="3" cols="50" type="text" wire:model.defer="editedData.almuerzo" 
                                                class="w-full px-1 py-0.5 border rounded bg-gray-100 text-xs resize-y min-h-min" placeholder="Almuerzo"></textarea>
-                                        <button wire:click="openDietModal('almuerzo')"
-                                                class="bg-purple-500 text-white rounded-full p-1 hover:bg-red-600 transition-colors duration-200 ease-in-out">
+                                        <button wire:click="openDietModal({{ $record->id }}, 'almuerzo')"
+                                            class="bg-purple-500 text-white rounded-full p-1 hover:bg-red-600 transition-colors duration-200 ease-in-out">
                                             🍏
                                         </button>
                                     </div>
                                 </td>
                                 <td class="py-1 px-2">
                                     <div class="flex items-center space-x-2">
-                                        <textarea rows="3" cols="50" type="text" wire:model.defer="editedData.pm4" readonly
+                                        <textarea rows="3" cols="50" type="text" wire:model.defer="editedData.pm4" 
                                                class="w-full px-1 py-0.5 border rounded bg-gray-100 text-xs resize-y min-h-min" placeholder="4 PM"></textarea>
-                                        <button wire:click="openDietModal('pm4')"
-                                                class="bg-purple-500 text-white rounded-full p-1 hover:bg-red-600 transition-colors duration-200 ease-in-out">
+                                        <button wire:click="openDietModal({{ $record->id }}, 'pm4')"
+                                            class="bg-purple-500 text-white rounded-full p-1 hover:bg-red-600 transition-colors duration-200 ease-in-out">
                                             🍏
                                         </button>
                                     </div>
                                 </td>
                                 <td class="py-1 px-2">
                                     <div class="flex items-center space-x-2">
-                                        <textarea rows="3" cols="50" type="text" wire:model.defer="editedData.cena" readonly
+                                        <textarea rows="3" cols="50" type="text" wire:model.defer="editedData.cena" 
                                             class="w-full px-1 py-0.5 border rounded bg-gray-100 text-xs resize-y min-h-min" placeholder="Cena"></textarea>
-                                        <button wire:click="openDietModal('cena')"
-                                                class="bg-purple-500 text-white rounded-full p-1  hover:bg-red-600 transition-colors duration-200 ease-in-out">
+                                        <button wire:click="openDietModal({{ $record->id }}, 'cena')"
+                                            class="bg-purple-500 text-white rounded-full p-1 hover:bg-red-600 transition-colors duration-200 ease-in-out">
                                             🍏
                                         </button>
                                     </div>

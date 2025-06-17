@@ -8,7 +8,7 @@ use App\Models\Bed;
 use App\Models\DailyRecord;
 use App\Models\Diet;
 use App\Models\Patient;
-use Carbon\Carbon;
+
 use Illuminate\Http\Request;
 use Livewire\Component;
 use Livewire\WithPagination;
@@ -38,7 +38,10 @@ class DailyRecordComponent extends Component
     public string $currentMeal = '';
     public ?int $registroId = null;
     public $selectedDiets = []; // Array para almacenar los IDs de las dietas seleccionadas
-    public $mealDiets = []; // Array asociativo para guardar las dietas por comida
+    public $mealDiets = [];
+    public ?int $dietModalRecordId = null; // Array asociativo para guardar las dietas por comida
+
+    public $dietPresets = [];
 //--Variables para mover pacientes
     public bool $isMovePatientModalOpen = false;
     public int $recordIdToMove = 0;
@@ -46,6 +49,7 @@ class DailyRecordComponent extends Component
     public $selectedDestinationBedId = null;
     public $selectedBedCode = null; 
     public $selectedAreaName = null; 
+    public bool $applyToOtherMeals = false;
 
     protected $rules = [
         'bed_id' => 'required|exists:beds,id',
@@ -71,6 +75,7 @@ class DailyRecordComponent extends Component
         $this->selectedDate = now()->toDateString(); // Fecha actual por defecto
         $this->selectedArea = ''; // Ninguna área seleccionada por defecto
         $this->generateDailyRecords();
+        $this->selectedArea = request()->query('area', '');
         
         $this->registroId = $registroId;
         if ($this->registroId) {
@@ -81,32 +86,97 @@ class DailyRecordComponent extends Component
             $this->mealDiets['pm4'] = $record->pm4 ?? [];
             $this->mealDiets['cena'] = $record->cena ?? [];
         }
+       
+        // Define tus presets aquí. Cada preset tiene un nombre para el botón y un array de IDs de dietas.
+        $this->dietPresets = [
+            [
+                'name' => 'Básica (IDs: 1, 5, 17)', // Nombre descriptivo para el botón
+                'diet_ids' => [1, 5, 17]          // Los IDs de las dietas que componen este preset
+            ],
+            [
+                'name' => 'Post-Operatorio Ligero',
+                'diet_ids' => [3, 7] // Ejemplo con otros IDs
+            ],
+        ];
     }
 
 //--------------------------------- seleccionar Dietas- I-------------------------------------------------------
-    public function openDietModal($meal)
+    public function openDietModal($recordId, $meal)
     {
+        $this->dietModalRecordId = $recordId;
         $this->currentMeal = $meal;
-        $this->selectedDiets = $this->mealDiets[$meal] ?? []; // Carga las selecciones actuales
+        $this->selectedDiets = []; // Resetea antes de cargar
+
+        $record = DailyRecord::find($this->dietModalRecordId);
+
+        if ($record) {
+            $mealDietData = $record->{$this->currentMeal}; // Ej: $record->desayuno (que es un string "Dieta A+ Dieta B")
+
+            if (!empty($mealDietData) && is_string($mealDietData)) {
+                $dietNamesArray = explode('+ ', $mealDietData);
+                $trimmedDietNamesArray = array_map('trim', $dietNamesArray);
+                // Filtrar nombres vacíos que podrían surgir de múltiples espacios o un delimitador al final
+                $actualDietNames = array_filter($trimmedDietNamesArray, function ($value) {
+                    return !is_null($value) && $value !== '';
+                });
+
+                if (!empty($actualDietNames)) {
+                    // Convertir nombres de dietas a IDs para preseleccionar en el modal
+                    $this->selectedDiets = Diet::whereIn('name', $actualDietNames)->pluck('id')->toArray();
+                }
+            }
+        }
         $this->showDietModal = true;
     }
 
+    
+
     public function saveDietSelection()
     {
-        $selectedDietNames = Diet::whereIn('id', $this->selectedDiets)->pluck('name')->toArray();
-
-        // Actualiza editedData con los nombres de las dietas
-        $this->editedData[$this->currentMeal] = implode(' ', $selectedDietNames);
-
-        $record = DailyRecord::find($this->registroId);
-        if ($record) {
-            $record->update([
-                $this->currentMeal => implode('+ ', $selectedDietNames),
-            ]);
+        if (is_null($this->dietModalRecordId) || empty($this->currentMeal)) {
+            session()->flash('error', 'Error: No se ha especificado el registro o la comida para guardar la dieta.');
+            $this->showDietModal = false;
+            return;
         }
 
-        $this->showDietModal = false;
-        $this->selectedDiets = [];
+        $selectedDietObjects = Diet::whereIn('id', $this->selectedDiets)->get();
+        $selectedDietNames = $selectedDietObjects->pluck('name')->toArray();
+        $dietString = implode('+ ', $selectedDietNames);
+
+        $record = DailyRecord::find($this->dietModalRecordId);
+        if ($record) {
+            $record->update([
+                $this->currentMeal => $dietString ?: null,
+            ]);
+
+            // Actualizar editedData para reflejar el cambio en el textarea
+            if ($this->editingRow == $this->dietModalRecordId) {
+                $this->editedData[$this->currentMeal] = $dietString ?: null;
+            }
+
+            if ($this->applyToOtherMeals) {
+                $mealsToUpdate = ['desayuno', 'am10', 'almuerzo', 'pm4', 'cena'];
+                foreach ($mealsToUpdate as $meal) {
+                    if ($meal !== $this->currentMeal) {
+                        $record->update([
+                            $meal => $dietString ?: null,
+                        ]);
+                        // Actualizar también editedData para los otros horarios si la fila está en edición
+                        if ($this->editingRow == $this->dietModalRecordId) {
+                            $this->editedData[$meal] = $dietString ?: null;
+                        }
+                    }
+                }
+                session()->flash('message', 'Dietas guardadas y aplicadas a otros horarios.');
+            } else {
+                session()->flash('message', 'Dieta actualizada para ' . ucfirst($this->currentMeal));
+            }
+
+            $this->showDietModal = false;
+            $this->applyToOtherMeals = false; // Resetear la propiedad después de guardar
+        } else {
+            session()->flash('error', 'Registro no encontrado para actualizar dietas.');
+        }
     }
     
 //--------------------------------- seleccionar Dietas--END------------------------------------------------------    
@@ -351,44 +421,41 @@ class DailyRecordComponent extends Component
 //generar los datos de todas las camas
     public function generateDailyRecords()
     {
+        
         $beds = Bed::all();
         $today = now()->toDateString();
-        $yesterday = now()->subDay()->toDateString(); // Obtener la fecha de ayer
+        $yesterday = now()->subDay()->toDateString();
+        
 
-        // Obtener los registros de ayer para todas las camas
+        // Traer todos los registros de ayer, indexados por cama
         $yesterdayRecords = DailyRecord::whereDate('fecha_registro', $yesterday)
-                                            ->get()
-                                            ->keyBy('bed_id'); // Indexar por bed_id para acceso rápido
+                                        ->get()
+                                        ->keyBy('bed_id');
 
         foreach ($beds as $bed) {
-            // Verificar si ya existe un registro para esta cama hoy
             $exists = DailyRecord::where('bed_id', $bed->id)
                                 ->whereDate('fecha_registro', $today)
                                 ->exists();
 
             if (!$exists) {
-                $patientIdYesterday = null; // Inicialmente no hay paciente del día anterior
-
-                // Verificar si había un registro ayer para esta cama y si tenía paciente
-                if (isset($yesterdayRecords[$bed->id]) && $yesterdayRecords[$bed->id]->patient_id) {
-                    $patientIdYesterday = $yesterdayRecords[$bed->id]->patient_id;
-                }
+                $recordYesterday = $yesterdayRecords[$bed->id] ?? null;
 
                 DailyRecord::create([
                     'bed_id' => $bed->id,
-                    'patient_id' => $patientIdYesterday, // Usar el patientId del registro de ayer (si existe) o null
+                    'patient_id' => $recordYesterday->patient_id ?? null,
                     'fecha_registro' => $today,
-                    'desayuno' => null,
-                    'am10' => null,
-                    'almuerzo' => null,
-                    'pm4' => null,
-                    'cena' => null,
-                    'indicaciones' => '',
-                    'diagnostico' => '',
+                    'desayuno' => $recordYesterday->desayuno ?? null,
+                    'am10' => $recordYesterday->am10 ?? null,
+                    'almuerzo' => $recordYesterday->almuerzo ?? null,
+                    'pm4' => $recordYesterday->pm4 ?? null,
+                    'cena' => $recordYesterday->cena ?? null,
+                    'indicaciones' => $recordYesterday->indicaciones ?? '',
+                    'diagnostico' => $recordYesterday->diagnostico ?? '',
                 ]);
             }
         }
     }
+
     //---------------------------- Mover Paciente - INICIO ---------------------------------------
     public function openMovePatientModal(int $recordId)
     {
@@ -591,5 +658,30 @@ class DailyRecordComponent extends Component
     {
         $this->resetPage(); // Para evitar problemas con la paginación
     }
+//-----------------------------DIETAS PRESETS
+    public function applyDietPreset($presetIndex)
+    {
+        // Verifica que el índice del preset exista en nuestro array de presets
+        if (isset($this->dietPresets[$presetIndex])) {
+            $presetDietIds = $this->dietPresets[$presetIndex]['diet_ids'];
+
+            // Opcional: Validar que los IDs del preset realmente existen en la tabla de dietas
+            // Esto es una buena práctica para evitar errores si los presets se desactualizan.
+            $validDietIds = \App\Models\Diet::whereIn('id', $presetDietIds)->pluck('id')->toArray();
+
+            // Asigna los IDs de dietas del preset a la propiedad $selectedDiets.
+            // Como los checkboxes están vinculados con wire:model="selectedDiets",
+            // Livewire automáticamente marcará/desmarcará los checkboxes correspondientes.
+            $this->selectedDiets = $validDietIds;
+
+            // Si quisieras que el preset AÑADA a la selección actual en lugar de SOBRESCRIBIRLA:
+            // $currentSelection = is_array($this->selectedDiets) ? $this->selectedDiets : [];
+            // $this->selectedDiets = array_values(array_unique(array_merge($currentSelection, $validDietIds)));
+
+        } else {
+            // Opcional: Manejar el caso de un índice de preset inválido, aunque no debería ocurrir
+            // session()->flash('error', 'El preset seleccionado no es válido.');
+        }
+    }    
 
 }

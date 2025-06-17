@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('beds', function (Blueprint $table) {
             $table->id();
             $table->foreignId('area_id')->constrained()->onDelete('cascade');
-            $table->string('codigo')->unique();
+            $table->string('codigo');
             $table->timestamps();
         });
     }

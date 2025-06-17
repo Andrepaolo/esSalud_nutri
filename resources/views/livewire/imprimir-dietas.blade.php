@@ -2,24 +2,78 @@
 <html>
 <head>
     <title>Dietas - {{ ucfirst($horario) }} - {{ now()->format('d-m-Y') }}</title>
-    <style> /* ... (Tu CSS sigue igual) ... */ </style>
+    <style>
+    @page {
+        size: 70mm 60mm;
+        margin: 0;
+    }
+
+    body {
+        width: 70mm;
+        margin: 0;
+        padding: 0;
+        font-family: Arial, sans-serif;
+        font-size: 10px;
+    }
+
+    .ticket {
+        width: 70mm;
+        height: 60mm;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        box-sizing: border-box;
+        page-break-after: always; /* una dieta por página si imprimes varias */
+        text-align: center;
+        padding: 5px;
+    }
+
+    img {
+        max-width: 60mm;
+        height: auto;
+    }
+
+    .area-header, .meal-header {
+        font-weight: bold;
+        margin: 2px 0;
+    }
+
+    .record-item {
+        margin-bottom: 2px;
+    }
+
+    .label {
+        font-weight: bold;
+    }
+    </style>
+
+
 </head>
 <body>
-
+    
     @foreach($registrosPorAreaPaginados as $areaNombre => $registrosPaginados) {{-- BUCLE EXTERNO: ÁREAS --}}
-        <div class="area-header">{{ $areaNombre }}</div>
+        
+        
 
         @foreach($registrosPaginados as $registro) {{-- BUCLE INTERNO: REGISTROS PAGINADOS DENTRO DE CADA ÁREA --}}
+        <div class="ticket">
             @if($loop->first) {{-- Mostrar encabezado de horario solo al inicio de cada ÁREA --}}
-                <div class="meal-header">{{ ucfirst($horario) }}</div>
+                
+                <div class="meal-header"><strong>{{ ucfirst($horario) }}</strong></div>
             @endif
 
-            <div class="record-item">
-                <span class="label">Paciente:</span> {{ optional($registro->patient)->nombreCompleto() ?? '---' }}
+            <div style="text-align: center; margin-top: 5px;">
+                <img src="{{ asset('images/esSaludlogo.png') }}" alt="EsSalud Logo" style="width: 100px;">
             </div>
             <div class="record-item">
                 <span class="label">Cama:</span> {{ $registro->bed->codigo }}-{{ $areaNombre }} {{-- Usar $areaNombre aquí --}}
             </div>
+            <div class="record-item">
+                <span class="label">Paciente:</span> {{ optional($registro->patient)->nombreCompleto() ?? '---' }}
+            </div>
+            
+            
             <div class="record-item">
                 <span class="label">Dieta ({{ $nombreDietaHorario }}):</span>
                 @php
@@ -53,7 +107,7 @@
                 <span class="label">Fecha:</span> {{ $registro->fecha_registro->format('d-m-Y') }}
             </div>
             <hr style="border-bottom: 1px dotted #ccc; margin-top: 5px; margin-bottom: 5px;">
-
+        </div>
         @endforeach {{-- FIN BUCLE INTERNO: REGISTROS PAGINADOS DENTRO DE CADA ÁREA --}}
 
         @if($registrosPaginados->isEmpty()) {{-- Mensaje "No hay dietas" por ÁREA --}}
