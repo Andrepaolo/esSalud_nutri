@@ -113,7 +113,7 @@ class DailyRecordComponent extends Component
             $mealDietData = $record->{$this->currentMeal}; // Ej: $record->desayuno (que es un string "Dieta A+ Dieta B")
 
             if (!empty($mealDietData) && is_string($mealDietData)) {
-                $dietNamesArray = explode('+ ', $mealDietData);
+                $dietNamesArray = explode(' ', $mealDietData);
                 $trimmedDietNamesArray = array_map('trim', $dietNamesArray);
                 // Filtrar nombres vacíos que podrían surgir de múltiples espacios o un delimitador al final
                 $actualDietNames = array_filter($trimmedDietNamesArray, function ($value) {
@@ -141,7 +141,7 @@ class DailyRecordComponent extends Component
 
         $selectedDietObjects = Diet::whereIn('id', $this->selectedDiets)->get();
         $selectedDietNames = $selectedDietObjects->pluck('name')->toArray();
-        $dietString = implode('+ ', $selectedDietNames);
+        $dietString = implode(' ', $selectedDietNames);
 
         $record = DailyRecord::find($this->dietModalRecordId);
         if ($record) {
@@ -155,7 +155,7 @@ class DailyRecordComponent extends Component
             }
 
             if ($this->applyToOtherMeals) {
-                $mealsToUpdate = ['desayuno', 'am10', 'almuerzo', 'pm4', 'cena'];
+                $mealsToUpdate = ['desayuno', 'almuerzo', 'cena'];
                 foreach ($mealsToUpdate as $meal) {
                     if ($meal !== $this->currentMeal) {
                         $record->update([
