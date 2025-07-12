@@ -21,7 +21,10 @@
                     class="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded-md shadow-md transition transform hover:scale-105 text-xs">
                 🔍 Filtrar
             </button>
-            
+            <button wire:click="openAllDietsModal"
+                    class="bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded-md shadow-md transition transform hover:scale-105 text-xs">
+                📋 Dietas
+            </button>
 
             <div>
                 <label for="searchBox" class="block text-xs font-medium text-gray-700">🔍 Buscar:</label>
@@ -129,7 +132,7 @@
 
                                 <td class="py-1 px-2">
                                     <div class="flex items-center space-x-2">
-                                        <textarea rows="3" cols="50" type="text" wire:model.defer="editedData.desayuno" 
+                                        <textarea rows="3" cols="50" type="text" wire:model.defer="editedData.desayuno"
                                             class="w-full px-1 py-0.5 border rounded bg-gray-100 text-xs resize-y min-h-min" placeholder="Desayuno"></textarea>
                                         <button wire:click="openDietModal({{ $record->id }}, 'desayuno')"
                                             class="bg-purple-500 text-white rounded-full p-1 hover:bg-red-600 transition-colors duration-200 ease-in-out">
@@ -139,7 +142,7 @@
                                 </td>
                                 <td class="py-1 px-2">
                                     <div class="flex items-center space-x-2">
-                                        <textarea rows="3" cols="50" type="text" wire:model.defer="editedData.am10" 
+                                        <textarea rows="3" cols="50" type="text" wire:model.defer="editedData.am10"
                                             class="w-full px-1 py-0.5 border rounded bg-gray-100 text-xs resize-y min-h-min" placeholder="10 AM"></textarea>
                                         <button wire:click="openDietModal({{ $record->id }}, 'am10')"
                                             class="bg-purple-500 text-white rounded-full p-1 hover:bg-red-600 transition-colors duration-200 ease-in-out">
@@ -149,7 +152,7 @@
                                 </td>
                                 <td class="py-1 px-2">
                                     <div class="flex items-center space-x-2">
-                                        <textarea rows="3" cols="50" type="text" wire:model.defer="editedData.almuerzo" 
+                                        <textarea rows="3" cols="50" type="text" wire:model.defer="editedData.almuerzo"
                                                class="w-full px-1 py-0.5 border rounded bg-gray-100 text-xs resize-y min-h-min" placeholder="Almuerzo"></textarea>
                                         <button wire:click="openDietModal({{ $record->id }}, 'almuerzo')"
                                             class="bg-purple-500 text-white rounded-full p-1 hover:bg-red-600 transition-colors duration-200 ease-in-out">
@@ -159,7 +162,7 @@
                                 </td>
                                 <td class="py-1 px-2">
                                     <div class="flex items-center space-x-2">
-                                        <textarea rows="3" cols="50" type="text" wire:model.defer="editedData.pm4" 
+                                        <textarea rows="3" cols="50" type="text" wire:model.defer="editedData.pm4"
                                                class="w-full px-1 py-0.5 border rounded bg-gray-100 text-xs resize-y min-h-min" placeholder="4 PM"></textarea>
                                         <button wire:click="openDietModal({{ $record->id }}, 'pm4')"
                                             class="bg-purple-500 text-white rounded-full p-1 hover:bg-red-600 transition-colors duration-200 ease-in-out">
@@ -169,7 +172,7 @@
                                 </td>
                                 <td class="py-1 px-2">
                                     <div class="flex items-center space-x-2">
-                                        <textarea rows="3" cols="50" type="text" wire:model.defer="editedData.cena" 
+                                        <textarea rows="3" cols="50" type="text" wire:model.defer="editedData.cena"
                                             class="w-full px-1 py-0.5 border rounded bg-gray-100 text-xs resize-y min-h-min" placeholder="Cena"></textarea>
                                         <button wire:click="openDietModal({{ $record->id }}, 'cena')"
                                             class="bg-purple-500 text-white rounded-full p-1 hover:bg-red-600 transition-colors duration-200 ease-in-out">
@@ -238,5 +241,15 @@
             {{ $records->links() }}
         </div>
     </div>
-    
+    @if($showAllDietsModal)
+    <div class="fixed inset-0 bg-gray-600 bg-opacity-75 flex items-center justify-center z-50">
+        <div class="bg-white rounded-lg shadow-xl p-6 w-full max-w-2xl mx-auto">
+            <div class="flex justify-between items-center mb-4">
+                <h2 class="text-xl font-bold">Gestión de Dietas</h2>
+                <button wire:click="closeAllDietsModal" class="text-gray-500 hover:text-gray-700 text-2xl font-bold">&times;</button>
+            </div>
+            @livewire('diet-component')
+        </div>
+    </div>
+    @endif
 </div>

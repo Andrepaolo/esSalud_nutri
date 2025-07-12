@@ -23,7 +23,7 @@ class DailyRecordComponent extends Component
     public $isOpen = false;
     public $record_id;
     public $search = '';
-    public $selectedDate, $selectedArea; 
+    public $selectedDate, $selectedArea;
 
     public $editingRow = null;
     public $editedData = [];
@@ -47,9 +47,11 @@ class DailyRecordComponent extends Component
     public int $recordIdToMove = 0;
     public $destinationBeds = [];
     public $selectedDestinationBedId = null;
-    public $selectedBedCode = null; 
-    public $selectedAreaName = null; 
+    public $selectedBedCode = null;
+    public $selectedAreaName = null;
     public bool $applyToOtherMeals = false;
+    // modal dieta nueva
+    public bool $showAllDietsModal = false;
 
     protected $rules = [
         'bed_id' => 'required|exists:beds,id',
@@ -64,8 +66,8 @@ class DailyRecordComponent extends Component
         'diagnostico' => 'nullable|string',
     ];
 
-    
-    
+
+
     //mount
     public function mount($registroId = null)
     {
@@ -76,7 +78,7 @@ class DailyRecordComponent extends Component
         $this->selectedArea = ''; // Ninguna área seleccionada por defecto
         $this->generateDailyRecords();
         $this->selectedArea = request()->query('area', '');
-        
+
         $this->registroId = $registroId;
         if ($this->registroId) {
             $record = DailyRecord::find($this->registroId);
@@ -86,7 +88,7 @@ class DailyRecordComponent extends Component
             $this->mealDiets['pm4'] = $record->pm4 ?? [];
             $this->mealDiets['cena'] = $record->cena ?? [];
         }
-       
+
         // Define tus presets aquí. Cada preset tiene un nombre para el botón y un array de IDs de dietas.
         $this->dietPresets = [
             [
@@ -129,7 +131,7 @@ class DailyRecordComponent extends Component
         $this->showDietModal = true;
     }
 
-    
+
 
     public function saveDietSelection()
     {
@@ -178,8 +180,8 @@ class DailyRecordComponent extends Component
             session()->flash('error', 'Registro no encontrado para actualizar dietas.');
         }
     }
-    
-//--------------------------------- seleccionar Dietas--END------------------------------------------------------    
+
+//--------------------------------- seleccionar Dietas--END------------------------------------------------------
 
     public function updatedSearchPatient()
     {
@@ -190,7 +192,7 @@ class DailyRecordComponent extends Component
                 ->orWhere('apellido', 'like', '%' . $this->searchPatient . '%')
                 ->limit()
                 ->get();
-                
+
         } else {
             $this->patients = [];
             $patients = $query->orderBy('id', 'desc')->paginate(5); // Limpia la lista si la búsqueda tiene menos de tres caracteres
@@ -210,7 +212,7 @@ class DailyRecordComponent extends Component
     }
 
 
-    
+
 //-------------------------------------------funcion de edicion--------------------------------------------------
     public function editRow($id)
     {
@@ -240,7 +242,7 @@ class DailyRecordComponent extends Component
             'editedData.indicaciones' => 'nullable|string',
             'editedData.diagnostico' => 'nullable|string',
         ]);
-        
+
 
         // Obtenemos el registro de la base de datos
         $record = DailyRecord::find($this->editingRow);
@@ -275,7 +277,7 @@ class DailyRecordComponent extends Component
         $this->editingRow = null;
     }
 //-------------------------------------------funcion de edicion--------------------------------------------------
-//-------------------------------------limpiarfilas I------------------------------------------------------------      
+//-------------------------------------limpiarfilas I------------------------------------------------------------
     public function clearRowFields(int $recordId)
     {
         $record = DailyRecord::find($recordId);
@@ -300,7 +302,7 @@ class DailyRecordComponent extends Component
             $this->generateDailyRecords(); // O podrías recargar solo el registro específico si es más eficiente
         }
     }
-//-------------------------------------limpiarfilas F-----------------------------------------------------------      
+//-------------------------------------limpiarfilas F-----------------------------------------------------------
     public function render()
     {
         $query = DailyRecord::query();
@@ -314,25 +316,25 @@ class DailyRecordComponent extends Component
                   ->orWhere('apellido', 'like', "%{$this->search}%");
             });
         }
-    
+
         if ($this->selectedDate) {
             $query->whereDate('fecha_registro', $this->selectedDate);
         }
-    
+
         if ($this->selectedArea) {
             $query->whereHas('bed.area', function ($q) {
                 $q->where('id', $this->selectedArea);
             });
         }
-    
+
         $records = $query->orderBy('id', 'asc')->paginate(21);
-        
+
         $areas = Area::all(); // Para el select de áreas
-    
+
         return view('livewire.daily-record-component', compact('records', 'areas'))
             ->layout('layouts.app');
     }
-    
+
 
     public function create()
     {
@@ -421,11 +423,11 @@ class DailyRecordComponent extends Component
 //generar los datos de todas las camas
     public function generateDailyRecords()
     {
-        
+
         $beds = Bed::all();
         $today = now()->toDateString();
         $yesterday = now()->subDay()->toDateString();
-        
+
 
         // Traer todos los registros de ayer, indexados por cama
         $yesterdayRecords = DailyRecord::whereDate('fecha_registro', $yesterday)
@@ -652,7 +654,7 @@ class DailyRecordComponent extends Component
         return $nombreDietaHorario;
     }
 //---------------------------- Imprimir Dietas - FIN ------------------------------------------
-    
+
 
     public function filterRecords()
     {
@@ -682,6 +684,15 @@ class DailyRecordComponent extends Component
             // Opcional: Manejar el caso de un índice de preset inválido, aunque no debería ocurrir
             // session()->flash('error', 'El preset seleccionado no es válido.');
         }
-    }    
+    }
+     public function openAllDietsModal()
+    {
+        $this->showAllDietsModal = true;
+    }
+
+    public function closeAllDietsModal()
+    {
+        $this->showAllDietsModal = false;
+    }
 
 }
