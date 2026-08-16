@@ -15,23 +15,26 @@ class AreaComponent extends Component
     public $areaSeleccionada = null;
     public $search;
     public $isOpen = false;
-    protected $listeners = ['render', 'delete' => 'delete'];
+
+    // Este listener es crucial para recibir el evento de SortableJS
+    protected $listeners = ['render', 'delete' => 'delete', 'updateAreaOrder'];
 
     protected $rules = [
-        'area.nombre' => 'required',
-        'area.description' => 'required',
+        'area.nombre' => 'required|string|max:255',
+        'area.description' => 'nullable|string|max:65535',
     ];
+
     public function mount()
     {
         $this->isOpen = false;
-        $this->area = ['id' => '', 'nombre' => '', 'description' => ''];
+        $this->area = ['id' => null, 'nombre' => '', 'description' => ''];
     }
 
     public function render()
     {
         $areas = Area::where('nombre', 'like', '%' . $this->search . '%')
-        ->orderBy('id', 'asc')
-        ->paginate(15);
+            ->orderBy('orden') // Ordena por el campo 'orden'
+            ->paginate(15);
 
         return view('livewire.area-component', compact('areas'))
             ->layout('layouts.app');
@@ -40,71 +43,93 @@ class AreaComponent extends Component
     public function verCamas($area_id)
     {
         $this->areaSeleccionada = $area_id;
+        // Aquí podrías emitir un evento o redirigir para mostrar las camas
     }
 
     public function create()
     {
-        //dd('Modal abierto');
         $this->isOpen = true;
-        $this->area = ['id' => null];
+        $this->area = ['id' => null, 'nombre' => '', 'description' => ''];
         $this->resetErrorBag();
+        $this->resetValidation();
     }
 
     public function store()
     {
-        //dd($this->area);
         $this->validate();
 
+        $dataToSave = [
+            'nombre' => $this->area['nombre'],
+            'description' => $this->area['description'] ?? 'Sin descripción',
+        ];
+
         if (!empty($this->area['id'])) {
-            $area = Area::find($this->area['id']);
-            if ($area) {
-                $area->update($this->area);
-                $message = 'Área actualizada correctamente';
+            $areaInstance = Area::find($this->area['id']);
+            if ($areaInstance) {
+                $areaInstance->update($dataToSave);
+                $this->emit('alert', ['title' => 'Área actualizada correctamente', 'type' => 'success']);
+            } else {
+                $this->emit('alert', ['title' => 'Error: Área no encontrada.', 'type' => 'error']);
+                return;
             }
-            else {
-                // Manejo del caso donde no se encuentra el producto
-                return;}
         } else {
-            Area::create($this->area);
-            $message = 'Área creada correctamente';
+            // Asigna el valor de 'orden' al crear una nueva área
+            $maxOrder = Area::max('orden');
+            $dataToSave['orden'] = is_null($maxOrder) ? 0 : $maxOrder + 1;
+            Area::create($dataToSave);
+            $this->emit('alert', ['title' => 'Área creada correctamente', 'type' => 'success']);
         }
 
         $this->resetComponent();
-        //$this->dispatch('alert', type: 'success', title: $message, position: 'center');
-        //$this->dispatch('close-modal');
     }
 
     public function edit($areaId)
     {
-        $area = Area::find($areaId);
-        if ($area) {
-            $this->area = $area->toArray();
+        $areaInstance = Area::find($areaId);
+        if ($areaInstance) {
+            $this->area = $areaInstance->toArray();
             $this->isOpen = true;
-            $this->dispatch('open-modal');
+            $this->resetErrorBag();
+            $this->resetValidation();
+        } else {
+            $this->emit('alert', ['title' => 'Error: Área no encontrada al intentar editar.', 'type' => 'error']);
         }
     }
 
     public function delete($areaId)
     {
-        $area = Area::find($areaId);
-        if ($area) {
-            $area->delete();
-            $this->dispatch('alert', type: 'success', title: 'Área eliminada', position: 'center');
+        $areaInstance = Area::find($areaId);
+        if ($areaInstance) {
+            $areaInstance->delete();
+            $this->emit('alert', ['title' => 'Área eliminada', 'type' => 'success']);
+            // Considera reordenar los elementos restantes si es importante mantener una secuencia sin huecos
+        } else {
+            $this->emit('alert', ['title' => 'Error: Área no encontrada al intentar eliminar.', 'type' => 'error']);
         }
-        $this->resetComponent();
+        // $this->resetComponent(); // Opcional
     }
 
     private function resetComponent()
     {
         $this->isOpen = false;
-        $this->area = ['id' => '', 'nombre' => '', 'description'=>''];
+        $this->area = ['id' => null, 'nombre' => '', 'description' => ''];
         $this->resetErrorBag();
+        $this->resetValidation();
     }
-    //---------------------------- Exportar a Excel - INICIO ---------------------------------------
+
     public function exportToExcel()
     {
         return Excel::download(new DailyRecordsExport(), 'registros_diarios_por_area.xlsx');
     }
 
-    //---------------------------- Exportar a Excel - FIN ------------------------------------------
+    // Este método se llama cuando SortableJS envía el nuevo orden
+    public function updateAreaOrder(array $orderedIds)
+    {
+        foreach ($orderedIds as $index => $id) {
+            Area::where('id', $id)->update(['orden' => $index]);
+        }
+
+        $this->emit('alert', ['title' => 'Orden de áreas actualizado', 'type' => 'success']);
+        // No es necesario re-renderizar aquí, la próxima carga de 'render' ya usará el nuevo orden
+    }
 }

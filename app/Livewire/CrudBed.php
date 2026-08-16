@@ -21,7 +21,7 @@ class CrudBed extends Component
     protected $listeners = ['render', 'delete' => 'deleteBed']; // Listener para eventos, ajustado para 'deleteBed'
 
     protected $rules = [ // Reglas de validación para el formulario (si añades CRUD)
-        'bed.codigo' => 'required|unique:beds,codigo', // Ejemplo, ajusta según tus necesidades
+        'bed.codigo' => 'required', // Ejemplo, ajusta según tus necesidades
         'bed.area_id' => 'required|exists:areas,id', // Ejemplo, ajusta según tus necesidades
     ];
 

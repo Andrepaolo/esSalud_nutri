@@ -18,7 +18,7 @@ class CrudPatient extends Component
         'id' => null,
         'nombre' => '',
         'apellido' => '',
-        'fecha_nacimiento' => '',
+        'fecha_nacimiento' => null,
         'dni' => '',
         'peso' => null,
         'talla' => null,
@@ -33,11 +33,7 @@ class CrudPatient extends Component
             'patient.nombre' => 'required|string',
             'patient.apellido' => 'required|string',
             'patient.fecha_nacimiento' => 'nullable|date',
-            'patient.dni' => [
-                'required',
-                'digits:8',
-                Rule::unique('patients', 'dni')->ignore($this->patient['id'] ?? 0),
-            ],
+            'patient.dni' => 'nullable|digits:8',
             'patient.peso' => 'nullable|numeric|min:0',
             'patient.talla' => 'nullable|numeric|min:0',
             'patient.imc' => 'nullable|numeric', // Añadir validación para imc (opcional)
@@ -71,6 +67,13 @@ class CrudPatient extends Component
     public function store()
     {
         $this->validate($this->rules());
+
+        // Convertir strings vacíos a null
+        foreach (['fecha_nacimiento', 'peso', 'talla', 'imc'] as $campo) {
+        if (empty($this->patient[$campo])) {
+            $this->patient[$campo] = null;
+        }
+    }
 
         // Calcular IMC ANTES de guardar
         $peso = $this->patient['peso'];
@@ -161,7 +164,7 @@ class CrudPatient extends Component
             'id' => null,
             'nombre' => '',
             'apellido' => '',
-            'fecha_nacimiento' => '',
+            'fecha_nacimiento' => null,
             'dni' => '',
             'peso' => null,
             'talla' => null,

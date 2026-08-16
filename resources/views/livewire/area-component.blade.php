@@ -3,38 +3,38 @@
 
         <!-- Header -->
         <div class="bg-gray-800 text-white text-center py-4 mb-5 rounded-lg shadow-lg">
-            <h1 class="text-2xl font-semibold">📌 Áreas</h1>
+            <h1 class="text-2xl font-semibold">ðŸ“Œ Ãreas</h1>
         </div>
 
-        <!-- Buscar y Crear Nueva Área -->
+        <!-- Buscar y Crear Nueva Ãrea -->
         <div class="mb-5 flex flex-col sm:flex-row justify-between items-center gap-3">
-            <input type="text" wire:model.live="search" placeholder="🔍 Buscar área..." 
+            <input type="text" wire:model.live="search" placeholder="ðŸ” Buscar Ã¡rea..."
                 class="px-3 py-2 border rounded-lg w-full sm:w-2/3 shadow focus:ring-2 focus:ring-blue-400 outline-none">
-            
-            <button type="button" wire:click="create()" 
-                class="bg-green-500 hover:bg-slate-700 text-white px-4 py-1.5 rounded-md shadow-md transition transform hover:scale-105 text-sm">➕ Nueva Área
+
+            <button type="button" wire:click="create()"
+                class="bg-green-500 hover:bg-slate-700 text-white px-4 py-1.5 rounded-md shadow-md transition transform hover:scale-105 text-sm">âž• Nueva Ãrea
             </button>
             <button wire:click="exportToExcel()"
                 class="bg-green-500 hover:bg-slate-700 text-white px-4 py-1.5 rounded-md shadow-md transition transform hover:scale-105 text-sm">
-                📊𝄜Exportar a Excel📈✅
+                ðŸ“Šð„œExportar a ExcelðŸ“ˆâœ…
             </button>
         </div>
 
-        <!-- Modal para Agregar Área -->
+        <!-- Modal para Agregar Ãrea -->
         @if($isOpen)
             <x-dialog-modal wire:model.defer="isOpen" :close-on-click-away="false">  <x-slot name="title">
-                    <h3>{{ $area['id'] ? 'Editar Área' : 'Añadir Nueva Área' }}</h3>
+                    <h3>{{ $area['id'] ? 'Editar Ãrea' : 'AÃ±adir Nueva Ãrea' }}</h3>
                 </x-slot>
 
                 <x-slot name="content">
                     <form wire:submit.prevent="store" id="area-form">
                         <div class="mb-4">
-                            <x-label value="Nombre del Área" class="font-bold" />
+                            <x-label value="Nombre del Ãrea" class="font-bold" />
                             <x-input type="text" wire:model.defer="area.nombre" class="w-full" />
                             <x-input-error for="area.nombre" />
                         </div>
                         <div class="mb-4">
-                            <x-label value="pequeña descripción" class="font-bold" />
+                            <x-label value="pequeÃ±a descripciÃ³n" class="font-bold" />
                             <x-input type="text" wire:model.defer="area.description" class="w-full" />
                             <x-input-error for="area.description" />
                         </div>
@@ -52,34 +52,34 @@
             </x-dialog-modal>
         @endif
 
-        <!-- Tarjetas de Áreas -->
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <!-- Tarjetas de Ãreas -->
+        <div id="sortable-areas" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             @foreach ($areas as $area)
-                <div class="bg-white shadow-md rounded-lg p-4 border border-gray-200 hover:shadow-lg transition">
+                <div class="bg-white shadow-md rounded-lg p-4 border border-gray-200 cursor-grab transition" data-id="{{ $area->id }}">
+
                     <h2 class="text-lg font-semibold text-blue-600">{{ $area->nombre }}</h2>
                     <p class="text-gray-600 mt-1 text-sm">{{ $area->description }}</p>
-                    
                     <div class="flex justify-between mt-3 space-x-2">
-                        <button wire:click="edit({{ $area->id }})" 
+                        <button wire:click="edit({{ $area->id }})"
                             class="bg-yellow-500 text-white px-3 py-1 rounded-md shadow-md transition hover:bg-yellow-600 text-xs">
-                            ✏️ Editar
+                            âœï¸ Editar
                         </button>
 
-                        <button wire:click="delete({{ $area->id }})" 
+                        <button wire:click="delete({{ $area->id }})"
                             class="bg-red-500 text-white px-3 py-1 rounded-md shadow-md transition hover:bg-red-600 text-xs">
-                            🗑 Eliminar
+                            ðŸ—‘ Eliminar
                         </button>
 
-                        <a href="{{ route('drecords') }}"
+                        <a href="{{ route('drecords', ['area' => $area->id]) }}"
                             class="bg-blue-500 text-white px-3 py-1 rounded-md shadow-md transition hover:bg-blue-600 text-xs inline-block text-center">
-                                🛏 Ver Camas
+                                ðŸ› Ver Camas
                         </a>
                     </div>
                 </div>
             @endforeach
         </div>
 
-        <!-- Paginación -->
+        <!-- PaginaciÃ³n -->
         @if($areas->hasPages())
             <div class="py-4 flex justify-center">
                 {{ $areas->links() }}
@@ -89,18 +89,34 @@
 
     <!-- SweetAlert para alertas -->
     @push('js')
-    <script>
-        Livewire.on('alert', event => {
-            Swal.fire({
-                title: '¡Éxito!',
-                text: event.title,
-                icon: 'success',
-                confirmButtonText: 'Aceptar'
+        <!-- SortableJS -->
+        <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
+
+        <script>
+            document.addEventListener('livewire:load', () => {
+                const el = document.getElementById('sortable-areas');
+
+                if (el) {
+                    new Sortable(el, {
+                        animation: 150
+                    });
+                }
             });
-        });
-    </script>
+        </script>
+
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+        <script>
+            Livewire.on('alert', event => {
+                Swal.fire({
+                    title: 'Â¡Ã‰xito!',
+                    text: event.title,
+                    icon: 'success',
+                    confirmButtonText: 'Aceptar'
+                });
+            });
+        </script>
     @endpush
 
     <!-- Componente de Camas -->
-    
+
 </div>

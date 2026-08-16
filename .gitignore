@@ -10,6 +10,7 @@
 .env.backup
 .env.save
 .env.local
+.env.dockerexample
 .env.railway
 .env.production
 .phpactor.json
