@@ -1,0 +1,46 @@
+version: '3.8'
+
+services:
+  app:
+    build: .
+    container_name: laravel_app
+    ports:
+      - "8081:80"  # Cambia 8081 si ya está en uso
+    volumes:
+      - .:/var/www/html:delegated 
+    depends_on:
+      - db
+    environment:
+      - APP_ENV=local
+      - APP_DEBUG=true
+      - APP_KEY=base64:kJ93RKqNPZB41IBlB4dxZ7bGsQMlTyl8De/u2v8ghaw=
+      - DB_CONNECTION=mysql
+      - DB_HOST=db  # Sigue utilizando "db" como el nombre del servicio
+      - DB_PORT=3306  # Puerto de MySQL dentro del contenedor
+      - DB_DATABASE=minsadb
+      - DB_USERNAME=root
+      - DB_PASSWORD=ap123$
+    networks:
+      - mynetwork  # Conexión explícita a la red de Docker
+
+  db:
+    image: mysql:8.0
+    container_name: laravel_db
+    restart: always
+    ports:
+      - "3307:3306"  # Exponemos el puerto 3307 en el host
+    environment:
+      - MYSQL_DATABASE=minsadb
+      - MYSQL_ROOT_PASSWORD=ap123$
+      - MYSQL_PASSWORD=ap123$
+    volumes:
+      - dbdata:/var/lib/mysql
+    networks:
+      - mynetwork  # Conexión explícita a la red de Docker
+
+volumes:
+  dbdata:
+
+networks:
+  mynetwork:  # Definición de la red personalizada
+    driver: bridge

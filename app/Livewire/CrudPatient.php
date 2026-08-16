@@ -4,7 +4,7 @@ namespace App\Livewire;
 
 use App\Models\Patient;
 use Illuminate\Validation\Rule;
-use Livewire\Component;
+use Livewire\Component; // Ensure this import is correct and the Livewire package is installed
 use Livewire\WithPagination;
 
 class CrudPatient extends Component
