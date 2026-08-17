@@ -24,7 +24,7 @@
         justify-content: center;
         align-items: center;
         box-sizing: border-box;
-        page-break-after: always; /* una dieta por pÃ¡gina si imprimes varias */
+        page-break-after: always; /* una dieta por página si imprimes varias */
         text-align: center;
         padding: 5px;
     }
@@ -52,13 +52,13 @@
 </head>
 <body>
 
-    @foreach($registrosPorAreaPaginados as $areaNombre => $registrosPaginados) {{-- BUCLE EXTERNO: ÃREAS --}}
+    @foreach($registrosPorAreaPaginados as $areaNombre => $registrosPaginados) {{-- BUCLE EXTERNO: ÁREAS --}}
 
 
 
-        @foreach($registrosPaginados as $registro) {{-- BUCLE INTERNO: REGISTROS PAGINADOS DENTRO DE CADA ÃREA --}}
+        @foreach($registrosPaginados as $registro) {{-- BUCLE INTERNO: REGISTROS PAGINADOS DENTRO DE CADA ÁREA --}}
         <div class="ticket">
-            @if($loop->first) {{-- Mostrar encabezado de horario solo al inicio de cada ÃREA --}}
+            @if($loop->first) {{-- Mostrar encabezado de horario solo al inicio de cada ÁREA --}}
 
                 <div class="meal-header"><strong>{{ ucfirst($horario) }}</strong></div>
             @endif
@@ -67,7 +67,7 @@
                 <img src="{{ asset('images/esSaludlogo.png') }}" alt="EsSalud Logo" style="width: 100px;">
             </div>
             <div class="record-item">
-                <span class="label">Cama:</span> {{ $registro->bed->codigo }}-{{ $areaNombre }} {{-- Usar $areaNombre aquÃ­ --}}
+                <span class="label">Cama:</span> {{ $registro->bed->codigo }}-{{ $areaNombre }} {{-- Usar $areaNombre aquí --}}
             </div>
             <div class="record-item">
                 <span class="label">Paciente:</span> {{ optional($registro->patient)->nombreCompleto() ?? '---' }}
@@ -78,7 +78,7 @@
                 <span class="label">Dieta ({{ $nombreDietaHorario }}):</span>
                 @php
                     $dietaText = 'No Registrada';
-                    // --- CÃ“DIGO CORRECTO PARA OBTENER LA DIETA DESDE $registro ---
+                    // --- CÓDIGO CORRECTO PARA OBTENER LA DIETA DESDE $registro ---
                     switch($horario) {
                         case 'desayuno':
                             $dietaText = $registro->desayuno ?: 'No Registrada';
@@ -92,7 +92,7 @@
                         case 'cena':
                             $dietaText = $registro->cena ?: 'No Registrada';
                             break;
-                        case 'pm4': // AsegÃºrate de que 'pm4' coincida con tu cÃ³digo
+                        case 'pm4': // Asegúrate de que 'pm4' coincida con tu código
                             $dietaText = $registro->pm4 ?: 'No Registrada';
                             break;
                         default:
@@ -108,20 +108,20 @@
             </div>
             <hr style="border-bottom: 1px dotted #ccc; margin-top: 5px; margin-bottom: 5px;">
         </div>
-        @endforeach {{-- FIN BUCLE INTERNO: REGISTROS PAGINADOS DENTRO DE CADA ÃREA --}}
+        @endforeach {{-- FIN BUCLE INTERNO: REGISTROS PAGINADOS DENTRO DE CADA ÁREA --}}
 
-        @if($registrosPaginados->isEmpty()) {{-- Mensaje "No hay dietas" por ÃREA --}}
-            <p style="text-align: center;">No hay dietas registradas para este horario en el Ã¡rea {{ $areaNombre }}.</p>
+        @if($registrosPaginados->isEmpty()) {{-- Mensaje "No hay dietas" por ÁREA --}}
+            <p style="text-align: center;">No hay dietas registradas para este horario en el área {{ $areaNombre }}.</p>
         @endif
 
-        @if(!$loop->last) {{-- Separador entre ÃREAS --}}
+        @if(!$loop->last) {{-- Separador entre ÁREAS --}}
             <hr style="border-top: 1px dashed #000; margin-top: 10px; margin-bottom: 10px;">
         @endif
 
-    @endforeach {{-- FIN BUCLE EXTERNO: ÃREAS --}}
+    @endforeach {{-- FIN BUCLE EXTERNO: ÁREAS --}}
 
-    @if(empty($registrosPorAreaPaginados)) {{-- Mensaje general "No hay dietas" si no hay Ã¡reas - Usar empty() en ARRAY --}}
-        <p style="text-align: center;">No hay dietas registradas para este horario y Ã¡rea.</p>
+    @if(empty($registrosPorAreaPaginados)) {{-- Mensaje general "No hay dietas" si no hay áreas - Usar empty() en ARRAY --}}
+        <p style="text-align: center;">No hay dietas registradas para este horario y área.</p>
     @endif
 
 </body>

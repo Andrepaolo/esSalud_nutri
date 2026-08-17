@@ -20,28 +20,24 @@ class DatabaseSeeder extends Seeder
     {
         // User::factory(10)->create();
 
-        User::create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
-            'password' => 'password',
-        ]);
-        User::create([
-            'name'=>'Andre Luque Alfaro',
-            'email'=>'andre@gmail.com',
-            //'profile'=>'https://i.pinimg.com/564x/94/e5/32/94e5325468d2859b075bfabb4dc83c4e.jpg',
-            'password'=>bcrypt('12345678')
-        ]);
-        User::create([
-            'name'=>'Administrador NutriciÃ³n',
-            'email'=>'admin@123',
-            'password'=>bcrypt('nutri2025')
-        ]);
+        User::updateOrCreate(
+            ['email' => 'test@example.com'],
+            ['name' => 'Test User', 'password' => 'password']
+        );
+        User::updateOrCreate(
+            ['email' => 'andre@gmail.com'],
+            ['name' => 'Andre Luque Alfaro', 'password' => bcrypt('12345678')]
+        );
+        User::updateOrCreate(
+            ['email' => 'admin@123'],
+            ['name' => 'Administrador Nutrición', 'password' => bcrypt('nutri2025')]
+        );
         Area::create(['nombre' => 'Medicina', 'description' => '1133']);
-        Area::create(['nombre' => 'ObservaciÃ³n 1', 'description' => 'null']);
-        Area::create(['nombre' => 'ObservaciÃ³n 2', 'description' => '1044']);
+        Area::create(['nombre' => 'Observación 1', 'description' => 'null']);
+        Area::create(['nombre' => 'Observación 2', 'description' => '1044']);
         Area::create(['nombre' => 'UVI 2', 'description' => 'null']);
         Area::create(['nombre' => 'TraumaShock', 'description' => 'null']);
-        Area::create(['nombre' => 'TÃ³pico', 'description' => 'null']);
+        Area::create(['nombre' => 'Tópico', 'description' => 'null']);
         Area::create(['nombre' => 'CIRUGIA', 'description' => 'null']);
         Area::create(['nombre' => 'OBSTETRICIA', 'description' => 'null']);
         Area::create(['nombre' => 'GINECOLOGIA', 'description' => 'null']);
@@ -71,7 +67,7 @@ class DatabaseSeeder extends Seeder
         Bed::create(['area_id' => 1, 'codigo' => '20']);
         Bed::create(['area_id' => 1, 'codigo' => '21']);
 
-        // ObservaciÃ³n 1 (id = 2)
+        // Observación 1 (id = 2)
         Bed::create(['area_id' => 2, 'codigo' => '1']);
         Bed::create(['area_id' => 2, 'codigo' => '2']);
         Bed::create(['area_id' => 2, 'codigo' => '3']);
@@ -88,7 +84,7 @@ class DatabaseSeeder extends Seeder
         Bed::create(['area_id' => 2, 'codigo' => '14']);
         Bed::create(['area_id' => 2, 'codigo' => '15']);
 
-        // ObservaciÃ³n 2 (id = 3)
+        // Observación 2 (id = 3)
         Bed::create(['area_id' => 3, 'codigo' => '1']);
         Bed::create(['area_id' => 3, 'codigo' => '2']);
         Bed::create(['area_id' => 3, 'codigo' => '3']);
@@ -116,7 +112,7 @@ class DatabaseSeeder extends Seeder
         Bed::create(['area_id' => 5, 'codigo' => '2']);
         Bed::create(['area_id' => 5, 'codigo' => '3']);
 
-        // TÃ³pico (id = 6)
+        // Tópico (id = 6)
         Bed::create(['area_id' => 6, 'codigo' => '1']);
         Bed::create(['area_id' => 6, 'codigo' => '2']);
         Bed::create(['area_id' => 6, 'codigo' => '3']);
@@ -307,16 +303,16 @@ class DatabaseSeeder extends Seeder
 
         Diet::create(['name' => 'TRITUR']);
         Diet::create(['name' => 'MOLID']);
-        Diet::create(['name' => 'PURÃ‰']);
+        Diet::create(['name' => 'PURÉ']);
         Diet::create(['name' => 'S/GRUM']);
 
         Diet::create(['name' => 'S/FIBRA']);
         Diet::create(['name' => 'C/FIBRA']);
-        Diet::create(['name' => 'S/LÃCTEO']);
+        Diet::create(['name' => 'S/LÁCTEO']);
         Diet::create(['name' => 'S/FLATUL']);
         Diet::create(['name' => 'RICA EN Fe']);
         Diet::create(['name' => 'S/VIT.K']);
-        Diet::create(['name' => 'S/CÃTIRCO']);
+        Diet::create(['name' => 'S/CÍTRICO']);
         Diet::create(['name' => 'S/IRRITAN']);
         Diet::create(['name' => 'S/BOCIOG']);
 
@@ -330,25 +326,25 @@ class DatabaseSeeder extends Seeder
         Diet::create(['name' => 'GLUT']);
         Diet::create(['name' => 'VIT.K']);
 
-        Diet::create(['name' => '1000 KCAL/DÃA']);
-        Diet::create(['name' => '1200 KCAL/DÃA']);
-        Diet::create(['name' => '1500 KCAL/DÃA']);
-        Diet::create(['name' => '1800 KCAL/DÃA']);
-        Diet::create(['name' => '2000 KCAL/DÃA']);
-        Diet::create(['name' => '2200 KCAL/DÃA']);
-        Diet::create(['name' => '2500 KCAL/DÃA']);
-        Diet::create(['name' => '2800 KCAL/DÃA']);
+        Diet::create(['name' => '1000 KCAL/DÍA']);
+        Diet::create(['name' => '1200 KCAL/DÍA']);
+        Diet::create(['name' => '1500 KCAL/DÍA']);
+        Diet::create(['name' => '1800 KCAL/DÍA']);
+        Diet::create(['name' => '2000 KCAL/DÍA']);
+        Diet::create(['name' => '2200 KCAL/DÍA']);
+        Diet::create(['name' => '2500 KCAL/DÍA']);
+        Diet::create(['name' => '2800 KCAL/DÍA']);
 
         //Daily Records
         DailyRecord::create([
             'bed_id' => 1,
             'patient_id' => 1,
             'fecha_registro' => now(),
-            'desayuno' => '2000 KCAL/DÃA',
-            'am10' => '2000 KCAL/DÃA',
-            'almuerzo' => '2000 KCAL/DÃA',
-            'pm4' => '2000 KCAL/DÃA',
-            'cena' => '2000 KCAL/DÃA',
+            'desayuno' => '2000 KCAL/DÍA',
+            'am10' => '2000 KCAL/DÍA',
+            'almuerzo' => '2000 KCAL/DÍA',
+            'pm4' => '2000 KCAL/DÍA',
+            'cena' => '2000 KCAL/DÍA',
             'indicaciones' => 'debe reposar y tomar pastillas',
             'diagnostico' => 'puesto para el alta ',
 
