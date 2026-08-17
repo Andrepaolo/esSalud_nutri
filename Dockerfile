@@ -37,6 +37,10 @@ RUN ln -s /usr/local/lib/node_modules/npm/bin/npm-cli.js /usr/local/bin/npm \
     && a2enmod rewrite headers
 
 COPY 000-default.conf /etc/apache2/sites-available/000-default.conf
+COPY deploy/start.sh /usr/local/bin/start-container
+
+RUN sed -i 's/\r$//' /usr/local/bin/start-container \
+    && chmod +x /usr/local/bin/start-container
 
 WORKDIR /var/www/html
 
@@ -63,4 +67,4 @@ RUN npm run build \
 
 EXPOSE 80
 
-CMD ["sh", "-c", "sed -ri \"s/^Listen .*/Listen ${PORT}/\" /etc/apache2/ports.conf && sed -ri \"s/<VirtualHost \\*:[0-9]+>/<VirtualHost *:${PORT}>/\" /etc/apache2/sites-available/000-default.conf && php artisan storage:link --force >/dev/null 2>&1 || true; apache2-foreground"]
+CMD ["/usr/local/bin/start-container"]

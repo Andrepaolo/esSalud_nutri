@@ -1,6 +1,7 @@
 # Despliegue en Railway
 
 Este proyecto esta preparado para desplegarse en Railway usando el `Dockerfile`.
+El contenedor arranca con Apache mediante `deploy/start.sh`; no uses `php artisan serve` como comando de inicio en Railway.
 
 ## 1. Subir el proyecto a GitHub
 
@@ -18,6 +19,7 @@ Si tu rama principal no se llama `main`, usa el nombre de tu rama.
 2. Selecciona `Deploy from GitHub repo`.
 3. Elige este repositorio.
 4. Railway debe detectar el `Dockerfile` y construir la app con Docker.
+5. Si en `Settings > Deploy` tienes un Start Command manual con `php artisan serve`, borralo. El archivo `railway.toml` ya define el comando correcto.
 
 ## 3. Crear la base de datos
 
@@ -63,4 +65,5 @@ php artisan migrate --force
 - No subas el archivo `.env`.
 - `docker-compose.yml` queda solo para desarrollo local.
 - `vendor`, `node_modules` y `public/build` se generan durante el build Docker.
+- El arranque de produccion debe usar Apache, no `php artisan serve`.
 - Si usas archivos subidos por usuarios, considera configurar almacenamiento externo porque el filesystem de Railway no debe tratarse como almacenamiento permanente.
