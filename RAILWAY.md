@@ -24,7 +24,7 @@ Si tu rama principal no se llama `main`, usa el nombre de tu rama.
 ## 3. Crear la base de datos
 
 1. Dentro del mismo proyecto de Railway, agrega un servicio MySQL.
-2. En el servicio de Laravel, abre `Variables`.
+2. En el servicio de Laravel, no en el servicio MySQL, abre `Variables`.
 3. Copia las variables de `.env.railway.example`.
 4. Genera una nueva llave para `APP_KEY`:
 
@@ -39,12 +39,16 @@ php artisan key:generate --show
 Usa estas referencias para conectar Laravel con MySQL en Railway:
 
 ```env
+DB_CONNECTION=mysql
 DB_HOST=${{MySQL.MYSQLHOST}}
 DB_PORT=${{MySQL.MYSQLPORT}}
 DB_DATABASE=${{MySQL.MYSQLDATABASE}}
 DB_USERNAME=${{MySQL.MYSQLUSER}}
 DB_PASSWORD=${{MySQL.MYSQLPASSWORD}}
+DB_URL=${{MySQL.MYSQL_URL}}
 ```
+
+Si tu servicio de base de datos no se llama `MySQL`, cambia `MySQL` por el nombre exacto del servicio en Railway o usa el autocompletado de variables del panel.
 
 Cuando Railway te genere el dominio publico, coloca ese dominio en:
 
