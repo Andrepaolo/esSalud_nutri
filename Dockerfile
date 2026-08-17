@@ -34,7 +34,8 @@ COPY --from=node:20-bookworm-slim /usr/local/lib/node_modules /usr/local/lib/nod
 
 RUN ln -s /usr/local/lib/node_modules/npm/bin/npm-cli.js /usr/local/bin/npm \
     && ln -s /usr/local/lib/node_modules/npm/bin/npx-cli.js /usr/local/bin/npx \
-    && a2enmod rewrite headers
+    && { a2dismod mpm_event mpm_worker || true; } \
+    && a2enmod mpm_prefork rewrite headers
 
 COPY 000-default.conf /etc/apache2/sites-available/000-default.conf
 COPY deploy/start.sh /usr/local/bin/start-container
