@@ -4,8 +4,8 @@ on:
   schedule:
     # 7:00 AM Peru (UTC-5)
     - cron: "0 12 * * *"
-    # 7:00 PM Peru (UTC-5)
-    - cron: "0 0 * * *"
+    # 8:30 PM Peru (UTC-5)
+    - cron: "30 1 * * *"
   workflow_dispatch:
     inputs:
       action:
@@ -38,8 +38,8 @@ jobs:
           railway scale --project "$RAILWAY_PROJECT_ID" --environment "$RAILWAY_ENVIRONMENT" --service "$DB_SERVICE" "$RAILWAY_REGION=1"
           railway scale --project "$RAILWAY_PROJECT_ID" --environment "$RAILWAY_ENVIRONMENT" --service "$WEB_SERVICE" "$RAILWAY_REGION=1"
 
-      - name: Stop services at 7 PM Peru
-        if: github.event.schedule == '0 0 * * *' || github.event.inputs.action == 'stop'
+      - name: Stop services at 8:30 PM Peru
+        if: github.event.schedule == '30 1 * * *' || github.event.inputs.action == 'stop'
         run: |
           railway scale --project "$RAILWAY_PROJECT_ID" --environment "$RAILWAY_ENVIRONMENT" --service "$WEB_SERVICE" "$RAILWAY_REGION=0"
           railway scale --project "$RAILWAY_PROJECT_ID" --environment "$RAILWAY_ENVIRONMENT" --service "$DB_SERVICE" "$RAILWAY_REGION=0"
