@@ -1,0 +1,45 @@
+name: Railway Schedule
+
+on:
+  schedule:
+    # 7:00 AM Peru (UTC-5)
+    - cron: "0 12 * * *"
+    # 7:00 PM Peru (UTC-5)
+    - cron: "0 0 * * *"
+  workflow_dispatch:
+    inputs:
+      action:
+        description: "Accion manual"
+        required: true
+        default: "start"
+        type: choice
+        options:
+          - start
+          - stop
+
+jobs:
+  schedule:
+    runs-on: ubuntu-latest
+    env:
+      RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
+      RAILWAY_PROJECT_ID: ${{ vars.RAILWAY_PROJECT_ID }}
+      RAILWAY_ENVIRONMENT: production
+      RAILWAY_REGION: us-east
+      WEB_SERVICE: web
+      DB_SERVICE: MySql
+
+    steps:
+      - name: Install Railway CLI
+        run: npm install -g @railway/cli
+
+      - name: Start services at 7 AM Peru
+        if: github.event.schedule == '0 12 * * *' || github.event.inputs.action == 'start'
+        run: |
+          railway scale --project "$RAILWAY_PROJECT_ID" --environment "$RAILWAY_ENVIRONMENT" --service "$DB_SERVICE" "$RAILWAY_REGION=1"
+          railway scale --project "$RAILWAY_PROJECT_ID" --environment "$RAILWAY_ENVIRONMENT" --service "$WEB_SERVICE" "$RAILWAY_REGION=1"
+
+      - name: Stop services at 7 PM Peru
+        if: github.event.schedule == '0 0 * * *' || github.event.inputs.action == 'stop'
+        run: |
+          railway scale --project "$RAILWAY_PROJECT_ID" --environment "$RAILWAY_ENVIRONMENT" --service "$WEB_SERVICE" "$RAILWAY_REGION=0"
+          railway scale --project "$RAILWAY_PROJECT_ID" --environment "$RAILWAY_ENVIRONMENT" --service "$DB_SERVICE" "$RAILWAY_REGION=0"
